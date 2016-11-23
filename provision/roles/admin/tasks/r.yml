@@ -47,7 +47,7 @@
 
 - name: Install IRkernel spec
   shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "IRkernel::installspec()"
-  become_user: "{{ cluster_user }}"
+  become_user: "{{ admin_user }}"
   become_method: sudo
 
 - name: Install R packages recommended for the R interpreter.

@@ -1,43 +1,39 @@
 ---
-- hosts: 127.0.01
+- hosts: 127.0.0.1
   connection: local
   tasks:
     - name: Create Admins group
       group: name=admin state=present
       become: yes
-
+    
     - name: Create Admin user on all nodes
-      include_vars: init.yml
-      user: name={{ cluster_user }}
+      user: name={{ admin_user }}
             comment="Cluster Administrator"
-            group={{ cluster_user }}
+            group={{ admin_user }}
             createhome=yes
-            home=/home/{{ cluster_user }}
+            home=/home/{{ admin_user }}
             shell=/bin/bash
-            password={{ cluster_password |password_hash('sha512') }}
+            password={{ admin_pass |password_hash('sha512') }}
             generate_ssh_key=yes
             ssh_key_bits=2048
             state=present
       become: yes
 
     - name: Add Admin user to sudoers
-      include_vars: init.yml
-      lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
+      lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ admin_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ admin_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
       become: yes
 
     - name: Ensure Admin user ssh directory exists
-      include_vars: init.yml
-      file: dest=/home/{{ cluster_user }}/.ssh owner={{ cluster_user }} group={{ cluster_user }} state=directory mode=0700
+      file: dest=/home/{{ admin_user }}/.ssh owner={{ admin_user }} group={{ admin_user }} state=directory mode=0700
       become: yes
       
     - name: Disable strict host checking for the Admin user
-      include_vars: init.yml
       lineinfile: create=yes
-                  dest=/home/{{ cluster_user }}/.ssh/config
+                  dest=/home/{{ admin_user }}/.ssh/config
                   regexp=StrictHostKeyChecking
                   line="StrictHostKeyChecking no"
-                  owner={{ cluster_user }}
-                  group={{ cluster_user }}
+                  owner={{ admin_user }}
+                  group={{ admin_user }}
                   mode=0644
       become: yes
     
@@ -54,38 +50,37 @@
 #      become: yes
 
     - name: Setup passwordless ssh
-      include_vars: init.yml
-      shell: /bin/cat /home/{{ cluster_user }}/.ssh/id_rsa.pub >> /home/{{ cluster_user }}/.ssh/authorized_keys
+      shell: /bin/cat /home/{{ admin_user }}/.ssh/id_rsa.pub >> /home/{{ admin_user }}/.ssh/authorized_keys
       become: yes
-      become_user: "{{ cluster_user }}"
+      become_user: "{{ admin_user }}"
       
 # Verify if this is necessary for Admin node only deployment
 #    - name: Create local directory for ssh keys
 #      local_action: file path=sshkeys state=directory
 #    
 #    - name: Fetch ssh keys from the admin node
-#      fetch: src=/home/{{ cluster_user }}/.ssh/{{ item }} dest=sshkeys/{{ item }} flat=yes
+#      fetch: src=/home/{{ admin_user }}/.ssh/{{ item }} dest=sshkeys/{{ item }} flat=yes
 #      with_items:
 #        - id_rsa
 #        - id_rsa.pub
 #        - authorized_keys
 #      become: yes
-#      become_user: "{{ cluster_user }}"
+#      become_user: "{{ admin_user }}"
 
 # Verify if this is necessary for Admin node only deployment
 #- hosts: all:!admin
 #  tasks:
 #    - name: Distribute ssh keys
-#      copy: src=sshkeys/{{ item }} dest=/home/{{ cluster_user }}/.ssh/{{ item }}
+#      copy: src=sshkeys/{{ item }} dest=/home/{{ admin_user }}/.ssh/{{ item }}
 #      with_items:
 #        - id_rsa
 #        - id_rsa.pub
 #        - authorized_keys
 #      become: yes
-#      become_user: "{{ cluster_user }}"
+#      become_user: "{{ admin_user }}"
 #    
 #    - name: Ensure correct permissions on the ssh keys
-#      file: path=/home/{{ cluster_user }}/.ssh/{{ item }} mode=0600 owner={{ cluster_user }} group={{ cluster_user }}
+#      file: path=/home/{{ admin_user }}/.ssh/{{ item }} mode=0600 owner={{ admin_user }} group={{ admin_user }}
 #      with_items:
 #        - id_rsa
 #        - id_rsa.pub
@@ -95,8 +90,7 @@
 - name: Configure Data Science Libraries on the admin node
   hosts: 127.0.0.1
   connection: local
-  include_vars: init.yml
-  user: "{{ cluster_user }}"
+  user: "{{ admin_user }}"
   become: yes
 
   roles:

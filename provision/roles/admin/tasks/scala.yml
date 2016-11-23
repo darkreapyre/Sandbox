@@ -19,7 +19,7 @@
 #  apt: pkg=sbt state=installed update-cache=yes
 
 - name: Download scala
-  get_url: url=http://downloads.lightbend.com/scala/{{ scala_version }}/scala-{{ scala_version}}.deb dest=/home/{{ cluster_user }}/apps/scala-{{ scala_version }}.deb
+  get_url: url=http://downloads.lightbend.com/scala/{{ scala_version }}/scala-{{ scala_version}}.deb dest=/home/{{ admin_user }}/apps/scala-{{ scala_version }}.deb
 
 - name: Install scala
-  shell: gdebi /home/{{ cluster_user }}/apps/scala-{{ scala_version }}.deb
+  shell: gdebi /home/{{ admin_user }}/apps/scala-{{ scala_version }}.deb

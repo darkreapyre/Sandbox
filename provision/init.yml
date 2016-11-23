@@ -5,31 +5,31 @@
 Total: 5
 
 # Master Username
-Master_User: "admin"
+admin_user: "admin"
 
 # Master Password
-Master_Pass: "ADMIN"
+admin_pass: "ADMIN"
 
 # Haddop Verion
 #Hadoop_Version: "2.6.2"
 
 # Spark Version
-Spark_Version: "1.6.1"
+spark_version: "1.6.1"
 
 # Maven Version
-Maven_Version: "3.3.9"
+maven_version: "3.3.9"
 
 # Scala Version
-Scala_Version: "2.10.5"
+scala_version: "2.10.5"
 
 # TensorFlow Version
-TFlow_Version: "0.9.0"
+tflow_version: "0.9.0"
 
 # DataStax Enterprise version
-DSE_Version: "5.0.1-1"
+dse_version: "5.0.1-1"
 
 # RStudio Server version
-RStudio_Server: "0.99.903"
+rstudio_server: "0.99.903"
 
 # RStudio Shiny version
-Shiny_Version: "1.4.2.786"
+shiny_version: "1.4.2.786"

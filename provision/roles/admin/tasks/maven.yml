@@ -9,13 +9,13 @@
 - name: Download maven
   get_url:
     url: "{{webResponse.json.preferred}}{{webResponse.json.path_info}}"
-    dest: /home/{{ cluster_user }}/apps/apache-maven-{{ maven_version }}-bin.tar.gz
+    dest: /home/{{ admin_user }}/apps/apache-maven-{{ maven_version }}-bin.tar.gz
     mode: 0440
     validate_certs: False
 
 - name: Extract maven
   unarchive:
-    src: /home/{{ cluster_user }}/apps/apache-maven-{{ maven_version }}-bin.tar.gz
+    src: /home/{{ admin_user }}/apps/apache-maven-{{ maven_version }}-bin.tar.gz
     dest: /usr/local/
     copy: no
     creates: /usr/local/apache-maven-{{ maven_version }}

@@ -33,7 +33,7 @@ if (length(packages) != 0){
 }
 
 # Initialze connectivity to the Spark Cluster
-Sys.setenv(SPARK_HOME = "/home/{{ cluster_user }}/apps/spark")
+Sys.setenv(SPARK_HOME = "/home/{{ admin_user }}/apps/spark")
 
 # Initialize SparkR
 library(SparkR, lib.loc = c(file.path(Sys.getenv("SPARK_HOME"), "R", "lib")))

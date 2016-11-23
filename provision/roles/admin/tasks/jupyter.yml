@@ -2,9 +2,9 @@
 - name: Create notebooks directory
   file:
     state: directory
-    dest: /home/{{ cluster_user }}/notebooks
-    owner: "{{ cluster_user }}"
-    group: "{{ cluster_user }}"
+    dest: /home/{{ admin_user }}/notebooks
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
 
 - name: Install Jupyter for Python3
   pip: name=jupyter executable=pip3
@@ -17,22 +17,22 @@
 
 - name: Generate notebook config
   command: jupyter notebook --generate-config
-  become_user: "{{ cluster_user }}"
+  become_user: "{{ admin_user }}"
 
 - name: Create Jupyter default config
   template:
     src=jupyter_notebook_config.py.j2
-    dest=/home/{{ cluster_user }}/.jupyter/jupyter_notebook_config.py
-    owner={{ cluster_user }}
-    group={{ cluster_user }}
+    dest=/home/{{ admin_user }}/.jupyter/jupyter_notebook_config.py
+    owner={{ admin_user }}
+    group={{ admin_user }}
 
 - name: Unset the Jupyter runtime id in .bashrc
   lineinfile:
-    dest: '/home/{{ cluster_user }}/.bashrc'
+    dest: '/home/{{ admin_user }}/.bashrc'
     line: 'unset XDG_RUNTIME_DIR'
     regexp: '^(# *)?unset XDG_RUNTIME'
-  become_user: "{{ cluster_user }}"
+  become_user: "{{ admin_user }}"
 
 # The following need to be researched as the destination directory doesn't exist in jupyter.
 #- name: Disable notebook warnings
-#  template: src=disable-warning.py.j2 dest=/home/{{ cluster_user }}/.ipython/profile_default/startup/disable-warning.py
+#  template: src=disable-warning.py.j2 dest=/home/{{ admin_user }}/.ipython/profile_default/startup/disable-warning.py

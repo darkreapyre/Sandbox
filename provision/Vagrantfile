@@ -8,36 +8,35 @@ require 'yaml'
 puts @cmd.inspect
 
 # ------------------------- GLOBAL CONFIG PARAMS ----------------------------
-Total = @cmd['Total']
-Username = @cmd['Username']
-Password = @cmd['Password']
-Pool = @cmd['Pool']
-Cluster = @cmd['Cluster']
-Template = @cmd['Template']
-Host = @cmd['Host']
-Spark_Version = @cmd['Spark_Version']
-Master_User = @cmd['Master_User']
-Master_Password = @cmd['Master_Pass']
-Maven_Version = @cmd['Maven_Version']
-DSE_Version = @cmd['DSE_Version']
-Scala_Version = @cmd['Scala_Version']
-TFlow_Version = @cmd['TFlow_Version']
-RStudio_Server = @cmd['RStudio_Server']
-Shiny_Version = @cmd['Shiny_Version']
+#Total = @cmd['Total']
+#Username = @cmd['Username']
+#Password = @cmd['Password']
+#Pool = @cmd['Pool']
+#Cluster = @cmd['Cluster']
+#Template = @cmd['Template']
+#Host = @cmd['Host']
+#Spark_Version = @cmd['spark_version']
+#Master_User = @cmd['admin_user']
+#Master_Password = @cmd['admin_pass']
+#Maven_Version = @cmd['maven_version']
+#DSE_Version = @cmd['dse_version']
+#Scala_Version = @cmd['scala_version']
+#TFlow_Version = @cmd['tflow_version']
+#RStudio_Server = @cmd['rstudio_server']
+#Shiny_Version = @cmd['shiny_version']
 # -------------------------- END GLOBAL CONFIG PARAMS -----------------------
 
 groups = {
   "admin" => [],
-  "dse" => [],
-  "flink" => [],
-  "all_groups:children" => ["admin", "dse", "flink"]
+  "workers" => [],
+  "all_groups:children" => ["admin", "workers"]
 }
 
 Vagrant.configure("2") do |config|
   config.vm.box = 'vsphere'
   config.vm.box_url = './example_box/dummy.box'
   config.vm.boot_timeout = 600
-  (1..Total).each do |i|
+  (1..@cmd['Total']).each do |i|
     if i == 1
       name = "admin"
       groups["admin"] << name
@@ -55,15 +54,15 @@ Vagrant.configure("2") do |config|
           ansible.playbook = "site.yml"
           ansible.groups = groups
           ansible.extra_vars = {
-            "dse_version" => DSE_Version,
-            "rstudio_server" => RStudio_Server,
-            "shiny_version" => Shiny_Version,
-            "spark_version" => Spark_Version,
-            "maven_version" => Maven_Version,
-            "tflow_version" => TFlow_Version,
-            "scala_version" => Scala_Version,            
-            "cluster_user" => Master_User,
-            "cluster_password" => Master_Password
+            "dse_version" => @cmd['dse_version'],
+            "rstudio_server" => @cmd['rstudio_server'],
+            "shiny_version" => @cmd['shiny_version'],
+            "spark_version" => @cmd['spark_version']
+            "maven_version" => @cmd['maven_version'],
+            "tflow_version" => @cmd['tflow_version'],
+            "scala_version" => @cmd['scala_version'],            
+            "cluster_user" => @cmd['admin_user'],
+            "cluster_password" => @cmd['admin_pass']
           }
           ansible.limit = "all"
           ansible.verbose = "v"

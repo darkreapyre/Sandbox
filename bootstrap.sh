@@ -29,4 +29,5 @@ echo "Bootstrap Complete"
 # Provision
 echo "Deploy Data Science admin node"
 cd /home/vagrant/provision
+ansible-playbook local.yml --extra-vars "@init.yml"
 #vagrant up --no-parallel
