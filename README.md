@@ -19,67 +19,13 @@ This documnet further details some of the additional processes and tools used in
 
 ## Configuration Overview
 ### Requirements
-The following are the basic components needed to start.
+The following are the components required and have been tested:
 
-1. A working AWS environment
-2. Vagrant 1.8.4
-3. vagrant-vsphere Plugin
-4. Ubuntu 14.04 (Trusty)
-5. DHCP server on the subnet that will the virtual machines.
+1. A working AWS environment.
+2. Vagrant 1.8.7.
+3. VirtualBox 5.0.28 r111378 (MacOS).
 
-### Create an Ubuntu Template  
-#### Virtual Machine Configuration
-Below are the recommended virtual machine configuration settings to ensure that all hardware reuquirements are met:
-- 16 vCPU
-- 64GB Virtual RAM
-- 250GB Virtual Disk
-
-#### Ubuntu Installation and Configuration
-Creating the template for Vmware is exactly the same as creating a Vagrant "box". Therefore, the following is [based on](https://blog.engineyard.com/2014/building-a-vagrant-box) that process. After creating the *trusty-tmp* virtual machine, power it up, login and perform the following:  
-- Install VMware Tools. As a good practice it is suggested to add some of the basic tools to the template, even if these are part of the overall deployment process later.
-```sh
-$ sudo apt-get install open-vm-tools git zip unzip wget curl acl
-```
-- Configure the `root` and `vagrant` users
-```sh
-$ sudo passwd root # set to vagrant
-$ sudo visudo -f /etc/sudoers.d/vagrant
-$ vagrant ALL=(ALL) NOPASSWD:ALL
-```
-- Update the System.
-```sh
-$ sudo apt-get -y update
-$ sudo apt-get -y upgrade
-$ sudo shutdown -r now
-```
-- Install the Public Vagrant SSH Key
-```sh
-$ mkdir -p /home/vagrant/.ssh
-$ chmod 0700 /home/vagrant/.ssh
-$ wget --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/vagrant/.ssh/authorized_keys
-$ chmod 0600 /home/vagrant/.ssh/authorized_keys
-$ chown -R vagrant /home/vagrant/.ssh
-```
-- Install and Configure OpenSSH Server (If not installed during intial Ubuntu installation)
-.
-```sh
-$ sudo apt-get -y install openssh-server git zip unzip curl wget acl
-```
-- Edit `/etc/ssh/sshd_config` and uncomment the following line
-```sh
-AuthorizedKeysFile %h/.ssh/authorized_keys
-```
-- Restart the `ssh` server
-```sh
-$ sudo service ssh restart
-```
-- Remove the `trusty-tmp` entry in `/etc/hosts`
-- Shut down the server and convert it to a template
-```sh
-$ sudo shutdown now
-```
-
-### Configure the Ansible Control node
+### Configure the Admin node
 A dedicated Ansible Control node is required to load and execute the Ansible deployment. To this end a dedicated Vagrant virtual machine (Centos 7.2) is created.  
 To launch the Ansible Control node without starting the cluster deployment:
 
