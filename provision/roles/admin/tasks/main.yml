@@ -11,7 +11,7 @@
   copy: src=spark-cassandra-connector-uber.jar dest=/home/{{ admin_user }}/apps mode=0664 owner={{ admin_user }} group={{ admin_user }}
 
 - name: Download Spark 1.6.1 to Apps directory
-  get_url: url=http://apache.claz.org/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ admin_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
+  get_url: url=http://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ admin_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
 
 - name: Clone the latest version of Zeppelin
   git: repo=https://github.com/apache/incubator-zeppelin.git dest=/home/{{ admin_user }}/apps/incubator-zeppelin
