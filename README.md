@@ -11,7 +11,7 @@ This document details the process of setting up an ansible control node with `Va
 - RStudio Server 0.99.491 __VERSION TBC__
 - RStudio Shiny Server 1.4.1.759 __TBC__
 - Java 8 __VERSION TBC__
-- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBD__, Spark 1.6.1 and Solr __VERSION TBD__)
+- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBC__, Spark 1.6.1 and Solr __VERSION TBC__)
 - DataStax Opscenter 6.0
 - Flink 1.0
 
@@ -25,6 +25,7 @@ The following are the components required and have been tested:
 2. Vagrant 1.8.7.
 3. VirtualBox 5.0.28 r111378 (MacOS).
 4. VirtualBox Extension Pack 5.0.28 r111378.
+5. ubuntu/trusty64 (virtualbox, 20161121.0.0)
 
 ### Configure the Admin node
 A dedicated Ansible Control node is required to load and execute the Ansible deployment. To this end a dedicated Vagrant virtual machine (Centos 7.2) is created.  
@@ -46,12 +47,13 @@ provision
 +--example_box        <-- Vagrant metadata for the vSphere Template
 |  +--dummy.box
 +--roles              <-- Ansible Roles for the various cluster components
-|  +--dsbox
-|  +--dse
+|  +--admin
+|  +--workers
 |  +--opsecenter
 +--init.yml           <-- Cluster-wide configuration variables (vSphere Usernames; Passwords; Software versions etc.)
-+--site.yml           <-- Cluster-wide Ansible Playbook
-+--Vagrantfile        <-- Vagrant deployment file for vSphere cluster nodes
++--local.yml          <-- Ansible Playbook for the Admin node
++--aws.yml            <-- Ansible Playbook for the Worker nodes in AWS
++--Vagrantfile        <-- Vagrant deployment file for Admin node
 ```
 
 The next section describes the above components and how to build them.
