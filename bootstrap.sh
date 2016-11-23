@@ -19,10 +19,10 @@ vagrant plugin install vagrant-aws
 echo "Installing Ansible"
 sudo apt-add-repository ppa:ansible/ansible
 sudo apt-get update
-sudo apt-get install ansible
+sudo apt-get -y install ansible
 #sudo easy_install pip
 
-# To resolve permission issues with nested Vagrant
+# Ensure permission issues with nested Vagrant
 cp -R /vagrant/provision /home/vagrant/
 echo "Bootstrap Complete"
 
