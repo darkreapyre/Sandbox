@@ -1,0 +1,59 @@
+---
+- set_fact: cassandra_seeds="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+  with_items: "{{ groups['dse'] }}"
+  register: result
+
+- set_fact: cassandra_seeds="{{ result.results | map(attribute='ansible_facts.cassandra_seeds') | list | join(",") }}"
+
+- name: Update Hosts
+  apt: update_cache=yes
+
+- name: Install Common Packages
+  apt: pkg={{ item }} state=installed update-cache=yes
+  with_items:
+  - curl
+  - libssl0.9.8
+  - libjna-java
+  - sysstat
+  - python-software-properties
+
+- name: Add Oracle Java Repository
+  shell: add-apt-repository -y ppa:webupd8team/java
+
+- name: Add Datastax Repository
+  shell: echo "deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main" | sudo tee -a /etc/apt/sources.list.d/datastax.sources.list
+
+- name: Add Datastax Repository Key
+  apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
+
+- name: Update Hosts
+  apt: update_cache=yes
+
+- name: Accept Java License
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
+- name: Install Oracle Java 8
+  shell: DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer oracle-java8-set-default
+
+- name: Install Datastax Enterprise
+  apt: pkg=dse-full={{ dse_version }} state=installed update-cache=yes
+
+- name: Create jna symlink
+  # Consider using file module with state=link rather than running ln
+  shell: ln -s /usr/share/java/jna.jar /usr/share/dse/cassandra/lib || true
+
+- name: Configure Datastax Enterprise
+  template: src=templates/cassandra.yaml dest=/etc/dse/cassandra/cassandra.yaml
+
+- name: Configure Analytics
+  lineinfile:
+    dest: /etc/default/dse
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^SPARK_ENABLED=0', line: 'SPARK_ENABLED=1' }
+    - { regexp: '^SOLR_ENABLED=0', line: 'SOLR_ENABLED=1' }
+    - { regexp: '^GRAPH_ENABLED=0', line: 'GRAPH_ENABLED=1' }
+
+- name: Start Datastax Enterprise
+  service: name=dse enabled=yes state=started

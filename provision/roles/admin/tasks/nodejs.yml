@@ -1,0 +1,13 @@
+---
+- name: Download official Linux x64 distribution from Node.js
+  get_url: url=http://nodejs.org/dist/v0.12.8/node-v0.12.8-linux-x64.tar.gz dest=/home/{{ cluster_user }}/apps/node-v0.12.8-linux-x64.tar.gz
+
+- name: Unpack node
+  unarchive: src=/home/{{ cluster_user }}/apps/node-v0.12.8-linux-x64.tar.gz dest=/home/{{ cluster_user }}/apps/ copy=no
+
+- name: Install Node.js
+  # rework this to use unarchive instead of the tar command
+  command: tar -C /usr/local --strip-components 1 -xzf /home/{{ cluster_user }}/apps/node-v0.12.8-linux-x64.tar.gz
+  args:
+    creates: /usr/local/bin/node
+  

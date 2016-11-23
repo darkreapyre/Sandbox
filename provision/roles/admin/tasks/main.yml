@@ -1,0 +1,66 @@
+---
+- name: Create the Apps directory
+  file: path=/home/{{ cluster_user }}/apps state=directory owner={{ cluster_user }} group={{ cluster_user }} mode=0777 recurse=yes
+
+- name: Copy Spark-kernel to Apps directory
+  copy: src=spark-kernel-0.1.5-SNAPSHOT.tar.gz dest=/home/{{ cluster_user }}/apps mode=0777 owner={{ cluster_user }} group={{ cluster_user }}
+
+- name: Copy "uber" jar to Apps directory
+  copy: src=spark-cassandra-connector-uber.jar dest=/home/{{ cluster_user }}/apps mode=0664 owner={{ cluster_user }} group={{ cluster_user }}
+
+- name: Download Spark 1.6.1 to Apps directory
+  get_url: url=http://apache.claz.org/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
+
+- name: Clone the latest version of Zeppelin
+  git: repo=https://github.com/apache/incubator-zeppelin.git dest=/home/{{ cluster_user }}/apps/incubator-zeppelin
+  become_user: "{{ cluster_user }}"
+
+- name: Extract spark archive
+  unarchive:
+    src: /home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
+    dest: /home/{{ cluster_user }}/apps
+    creates: /home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6
+    copy: no
+    owner: "{{ cluster_user }}"
+    group: "{{ cluster_user }}"
+
+- name: Create Spark current version symbolic link and assign ownsership
+  file: path=/home/{{ cluster_user }}/apps/spark src=/home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6 state=link owner={{ cluster_user }} group={{ cluster_user }}
+
+- name: Create scripts directory
+  file: path=/home/{{ cluster_user }}/scripts state=directory owner={{ cluster_user }} group={{ cluster_user }} mode=0777 recurse=yes
+
+- name: Set SPARK_HOME in .bashrc
+  lineinfile:
+    dest: '/home/{{ cluster_user }}/.bashrc'
+    line: 'export SPARK_HOME=/home/{{ cluster_user }}/apps/spark'
+    regexp: '^(# *)?export SPARK_HOME='
+  become_user: "{{ cluster_user }}"
+
+- name: Add PATH to SPARK_HOME/bin in .bashrc
+  lineinfile:
+    dest: '/home/{{ cluster_user }}/.bashrc'
+    line: 'export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin # SPARK-BIN-PATH'
+    regexp: '# SPARK-BIN-PATH'
+  become_user: "{{ cluster_user }}"
+
+- name: Copy scripts and variables to admin node
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ cluster_user }} group={{ cluster_user }} mode=0777
+  with_items:
+    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ cluster_user }}/scripts/start-pyspark-notebook.sh"}
+    - {src: "sparkR-start.R.j2", dest: "/home/{{ cluster_user }}/scripts/sparkR-start.R"}
+    - {src: "zeppelin-env.sh.j2", dest: "/home/{{ cluster_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
+  
+- include: python.yml
+- include: scala.yml
+- include: ruby.yml
+- include: nodejs.yml
+- include: maven.yml
+- include: jupyter.yml
+- include: r.yml
+- include: spark-kernel.yml
+- include: rstudio-server.yml
+- include: rstudio-shiny.yml
+
+# TO-DO
+#- include: zeppelin.yml

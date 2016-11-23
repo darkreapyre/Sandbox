@@ -1,0 +1,82 @@
+---
+# The Ubuntu archives on CRAN are signed with a key with ID E084DAB9. Add this key to the system.
+- name: Add R public key
+  apt_key:
+    id: E084DAB9
+    keyserver: hkp://keyserver.ubuntu.com:80
+    state: present
+
+# in order to get the latest version of R, add CRAN repository to the to the list of sources
+- name: Add  cran-r Repository
+  apt_repository:
+    repo: "{{item.type}} {{item.url}}"
+    state: present
+    update_cache: true
+  with_items: r_repository #<-- Using bare variables; try "{{ r_repository }}""
+
+- name: Install R
+  apt: pkg=r-base state=present
+  with_items:
+    - r-base
+    - r-base-dev
+
+- name: openssl and libcurl required for R devtools package
+  apt: pkg={{item}} state=present
+  with_items:
+    - libssl-dev
+    - libcurl4-openssl-dev
+
+# knitr will also pull in the `evaluate` R package as a dependency
+- name: Install R packages required for the R interpreter/kernel
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('{{item}}' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('{{item}}'), repos=c('{{r_packages_repos}}'))"
+  with_items:
+    - knitr
+    - devtools
+
+- name: Install rCharts
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('rCharts' %in% installed.packages()[,'Package'])) devtools::install_github('rCharts', 'ramnathv')"
+
+- name: Install IRkernel package recommended for the R interpreter
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('IRkernel' %in% installed.packages()[,'Package'])) devtools::install_github('IRkernel/IRkernel')"
+
+- name: Install IRdisplay package recommended for the R interpreter
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('IRdisplay' %in% installed.packages()[,'Package'])) devtools::install_github('IRkernel/IRdisplay')"
+
+- name: Install R repr package recommended for the R interpreter display system (requires devtools first).
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('repr' %in% installed.packages()[,'Package'])) devtools::install_github('IRkernel/repr')"
+
+- name: Install IRkernel spec
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "IRkernel::installspec()"
+  become_user: "{{ cluster_user }}"
+  become_method: sudo
+
+- name: Install R packages recommended for the R interpreter.
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('{{item}}' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('{{item}}'), repos=c('{{r_packages_repos}}'))"
+  with_items:
+    - shiny
+    - ggplot2
+    - rzmq
+    - rmarkdown
+    - googleVis
+    - mplot
+    - htmltools
+    - base64enc
+    - data.table
+    - rmarkdown
+    - tidyr
+    - dplyr
+    - stringr
+    - rstudio
+    - knitr
+    - XML
+    - rJava
+    - mallet
+    - igraph
+    - SnowballC
+    - NLP
+    - openNLP
+    - rjson
+    - rPython
+    - plyr
+    - reshape2
+    - caret

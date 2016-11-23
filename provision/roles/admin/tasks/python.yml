@@ -1,0 +1,47 @@
+---
+- name: Install Python Dependencies
+  apt: pkg={{ item }} state=present
+  with_items:
+    - build-essential
+    - python-pip
+    - python-dev
+    - python3-pip
+    - python3-dev
+    - libzmq3
+    - libzmq3-dev
+    - g++
+    - libopenblas-dev
+    - libtiff5-dev
+    - libjpeg8-dev
+    - zlib1g-dev
+    - python-matplotlib
+    - python-scipy
+    - python-numpy
+    - python-pandas
+    - texlive
+    - texlive-latex-extra
+    - pandoc
+    - libreadline-dev
+    - python-psycopg2
+    - python-mpltoolkits.basemap
+    - libfontconfig
+    - gdebi-core
+
+- name: Install Python libraries
+  pip: name={{ item }} state=present
+  with_items:
+    - pygments
+    - jsonschema
+    - mpld3
+    - pyyaml
+    - psutil
+    - networkx
+    - scikit-learn
+    - Theano
+    - spark-sklearn
+    - sympy
+    - keras
+    - cassandra-driver
+
+- name: Install TensorFlow
+  pip: name=https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present

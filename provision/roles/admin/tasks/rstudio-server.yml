@@ -1,0 +1,6 @@
+---
+- name: Download RStudio Server
+  get_url: url=http://download2.rstudio.org/rstudio-server-{{ rstudio_server }}-amd64.deb dest=/home/{{ cluster_user }}/apps
+
+- name: Install RStudio Server
+  shell: gdebi -n /home/{{ cluster_user }}/apps/rstudio-server-{{ rstudio_server }}-amd64.deb

@@ -1,0 +1,51 @@
+# Useful additional packages to install if not already installed
+# Note that this may take a while
+options("repos"=c("http://cran.rstudio.com", "http://irkernel.github.io/", "http://www.freestatistics.org/cran/"), warn=-1) # set the cran mirror and disable warinings
+
+packages <- c("devtools",
+              "ggplot2",
+              "tidyr",
+              "dplyr",
+              "stringr",
+              "rstudio",
+              "knitr",
+              "rmarkdown",
+              "XML",
+              "rJava",
+              "mallet",
+              "igraph",
+              "SnowballC",
+              "NLP",
+              "openNLP",
+              "IRkernel",
+              "IRdisplay",
+              "rjson",
+              "rPython",
+              "plyr",
+              "psych",
+              "reshape2",
+              "caret",
+              "igraph")
+
+packages <- setdiff(packages, installed.packages()[, "Package"])
+if (length(packages) != 0){
+  (suppressMessages(install.packages(packages)))
+}
+
+# Initialze connectivity to the Spark Cluster
+Sys.setenv(SPARK_HOME = "/home/{{ cluster_user }}/apps/spark")
+
+# Initialize SparkR
+library(SparkR, lib.loc = c(file.path(Sys.getenv("SPARK_HOME"), "R", "lib")))
+
+# Initialize the Spark Context for Cluster Connectivity
+sc <- sparkR.init(
+  master = "{{ master }}",
+  sparkEnvir = list(spark.driver.memory="2g"),
+  sparkPackages="com.databricks:spark-csv_2.10:1.4.0") # Add .csv import cabaility
+
+# Initialize the SQLContext
+sqlContext <- sparkRSQL.init(sc)
+
+# REMEMBER TO SHUT DOWN `sparkR` WHEN DONE
+#sparkR.stop()
