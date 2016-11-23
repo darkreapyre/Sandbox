@@ -24,6 +24,7 @@ The following are the components required and have been tested:
 1. A working AWS environment.
 2. Vagrant 1.8.7.
 3. VirtualBox 5.0.28 r111378 (MacOS).
+4. VirtualBox Extension Pack 5.0.28 r111378.
 
 ### Configure the Admin node
 A dedicated Ansible Control node is required to load and execute the Ansible deployment. To this end a dedicated Vagrant virtual machine (Centos 7.2) is created.  
