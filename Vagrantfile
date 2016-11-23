@@ -3,10 +3,10 @@
 
 # ------------------------- CONFIG PARAMS ----------------------------
 provider = "virtualbox"      # VM provider
-type = "bento/centos-7.2"
-RAM = 16384                  # When testing Tachyon
+type = "ubuntu/trusty64"
+RAM = 8192                   # 
 CPUs = 2                     # CPU cores
-Name = "ansible"           # name of the master node (used in scripts/spark-env-sh)
+Name = "admin"               # name of the master node (used in scripts/spark-env-sh)
 # -------------------------- END CONFIG PARAMS -----------------------
 
 

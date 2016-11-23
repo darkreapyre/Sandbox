@@ -1,33 +1,32 @@
 #!/usr/bin/env bash
 
-echo "Configuring Ansible Control node"
+HOME=/vagrant
 
-sudo yum -y install epel-release
-sudo yum -y install kernel-devel kernel-headers dkms git curl unzip wget
-sudo yum -y groupinstall "Development Tools"
-sudo yum -y update
+echo "Bootstrapping Admin Node"
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y install git curl zip unzip wget acl software-properties-common
 
 # Install Vagrant
 echo "Installing Vagrant"
-sudo rpm -Uvh https://releases.hashicorp.com/vagrant/1.8.4/vagrant_1.8.4_x86_64.rpm
-vagrant plugin install vagrant-vsphere
-vagrant plugin install vagrant-address
-
+#sudo apt-get -y install vagrant
+wget https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
+sudo dpkg -i vagrant_1.8.7_x86_64.deb
+#vagrant plugin install vagrant-address
+vagrant plugin install vagrant-aws
 
 # Install Ansible
 echo "Installing Ansible"
-sudo yum -y install ansible
-sudo easy_install pip
-
-# Install Python libraries for vSphere
-echo "Installing vSpehere API"
-sudo pip install pysphere pyvmomi
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt-get update
+sudo apt-get install ansible
+#sudo easy_install pip
 
 # To resolve permission issues with nested Vagrant
 cp -R /vagrant/provision /home/vagrant/
-echo "Bootstrap Node Complete"
+echo "Bootstrap Complete"
 
 # Provision
-echo "Deploy Datastax Enterprise on VMware vSphere Virtual Machines"
+echo "Deploy Data Science admin node"
 cd /home/vagrant/provision
-vagrant up --no-parallel
+#vagrant up --no-parallel

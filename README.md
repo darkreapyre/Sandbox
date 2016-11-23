@@ -1,4 +1,4 @@
-# Installing a DataStax Analytics and Flink Complex Event Processing Cluster on VMware vSphere
+# Installing. Data Science Admin Node on a local machine (with DataStax Analytics on AWS).
 __WORK IN PROGRESS!__  
 ## Introduction
 This document details the process of setting up an ansible control node with `Vagrant` and connecting to a __Vmware vSphere 6.0__ environment to configure a virtualized Big Data ecosystem for the purpose of using it during Data Science for the Internet of Things (DSIoT) course. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:

@@ -1,4 +1,28 @@
 ---
+- name: Updating apt repository
+  apt: update_cache=yes
+  become: yes
+
+- name: Install common packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-pip
+    - python-scipy
+  become: yes
+
+- name: Install common Python libraries
+  pip: name={{ item }} state=present
+  with_items:
+    - scikit-learn
+    - Theano
+    - spark-sklearn
+    - keras
+  become: yes
+
+- name: Install TensorFlow
+  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
+  become: yes
+
 - name: Create the Apps directory
   file: path=/home/{{ cluster_user }}/apps state=directory owner={{ cluster_user }} group={{ cluster_user }} mode=0777 recurse=yes
 
