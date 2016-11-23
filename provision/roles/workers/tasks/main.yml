@@ -1,4 +1,6 @@
 ---
+- include: base.yml
+
 - set_fact: cassandra_seeds="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
   with_items: "{{ groups['dse'] }}"
   register: result

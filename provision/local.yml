@@ -90,7 +90,8 @@
 #      become: yes
 
 - name: Configure Data Science Libraries on the admin node
-  hosts: admin
+  hosts: 127.0.0.1
+  connection: local
   user: "{{ cluster_user }}"
   become: yes
 

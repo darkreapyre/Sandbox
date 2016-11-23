@@ -1,17 +1,17 @@
 # Installing. Data Science Admin Node on a local machine (with DataStax Analytics on AWS).
 __WORK IN PROGRESS!__  
 ## Introduction
-This document details the process of setting up an ansible control node with `Vagrant` and connecting to a __Vmware vSphere 6.0__ environment to configure a virtualized Big Data ecosystem for the purpose of using it during Data Science for the Internet of Things (DSIoT) course. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:
+This document details the process of setting up an ansible control node with `Vagrant` and connecting to an __Amazon Web Services (AWS)__ environment to configure a virtualized Big Data ecosystem for the purpose of using it during Data Science and Machine Learning. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:
 
-- Jupyter 4.0.6
-- Zeppelin 0.7-SNAPSHOT
+- Jupyter __VERSION TBC__
+- Zeppelin 0.7-SNAPSHOT __VERSION TBC__
 - Python 2.7
 - Scala 2.10.5
-- R __TBD__
-- RStudio Server 0.99.491
-- RStudio Shiny Server 1.4.1.759
-- Java 8
-- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBD__, Spark 1.6.1 and Solr __VERISON TBD__)
+- R __VERSION TBC__
+- RStudio Server 0.99.491 __VERSION TBC__
+- RStudio Shiny Server 1.4.1.759 __TBC__
+- Java 8 __VERSION TBC__
+- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBD__, Spark 1.6.1 and Solr __VERSION TBD__)
 - DataStax Opscenter 6.0
 - Flink 1.0
 
@@ -21,7 +21,7 @@ This documnet further details some of the additional processes and tools used in
 ### Requirements
 The following are the basic components needed to start.
 
-1. A working vSphere 6.0 environment
+1. A working AWS environment
 2. Vagrant 1.8.4
 3. vagrant-vsphere Plugin
 4. Ubuntu 14.04 (Trusty)
