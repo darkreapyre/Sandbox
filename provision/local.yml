@@ -1,6 +1,4 @@
 ---
-- include_vars: init.yml
-
 - hosts: 127.0.01
   connection: local
   tasks:
@@ -9,6 +7,7 @@
       become: yes
 
     - name: Create Admin user on all nodes
+      include_vars: init.yml
       user: name={{ cluster_user }}
             comment="Cluster Administrator"
             group={{ cluster_user }}
@@ -22,14 +21,17 @@
       become: yes
 
     - name: Add Admin user to sudoers
+      include_vars: init.yml
       lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
       become: yes
 
     - name: Ensure Admin user ssh directory exists
+      include_vars: init.yml
       file: dest=/home/{{ cluster_user }}/.ssh owner={{ cluster_user }} group={{ cluster_user }} state=directory mode=0700
       become: yes
       
     - name: Disable strict host checking for the Admin user
+      include_vars: init.yml
       lineinfile: create=yes
                   dest=/home/{{ cluster_user }}/.ssh/config
                   regexp=StrictHostKeyChecking
@@ -52,6 +54,7 @@
 #      become: yes
 
     - name: Setup passwordless ssh
+      include_vars: init.yml
       shell: /bin/cat /home/{{ cluster_user }}/.ssh/id_rsa.pub >> /home/{{ cluster_user }}/.ssh/authorized_keys
       become: yes
       become_user: "{{ cluster_user }}"
@@ -92,6 +95,7 @@
 - name: Configure Data Science Libraries on the admin node
   hosts: 127.0.0.1
   connection: local
+  include_vars: init.yml
   user: "{{ cluster_user }}"
   become: yes
 
