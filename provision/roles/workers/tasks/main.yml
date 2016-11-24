@@ -59,3 +59,5 @@
 
 - name: Start Datastax Enterprise
   service: name=dse enabled=yes state=started
+
+- include: notebook.yml
