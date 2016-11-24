@@ -97,8 +97,7 @@
     - admin
   
   vars:
-    # Verify if this is necessary for Admin node only deployment
-    #master: "{{ hostvars[groups['dse'][0]]['master_address'] }}"
+    master: "local[*]"
     r_cran_mirror: http://cran.rstudio.com/
     r_packages_repos: "{{ r_cran_mirror }}"
     r_repository:

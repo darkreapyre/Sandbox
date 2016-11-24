@@ -46,13 +46,12 @@
     regexp: '# SPARK-BIN-PATH'
   become_user: "{{ admin_user }}"
 
-# These files are only needed when connecting to AWS workers, BUT some might be local
-#- name: Copy scripts and variables to admin node
-#  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777
-#  with_items:
-#    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook.sh"}
-#    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start.R"}
-#    - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
+- name: Copy scripts and variables to admin node
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777
+  with_items:
+    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook-local.sh"}
+    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start-local.R"}
+    - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
   
 - include: python.yml
 - include: scala.yml

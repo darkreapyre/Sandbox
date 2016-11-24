@@ -1,5 +1,27 @@
 ---
-- include: base.yml
+- name: Updating apt repository
+  apt: update_cache=yes
+  become: yes
+
+- name: Install common packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-pip
+    - python-scipy
+  become: yes
+
+- name: Install common Python libraries
+  pip: name={{ item }} state=present
+  with_items:
+    - scikit-learn
+    - Theano
+    - spark-sklearn
+    - keras
+  become: yes
+
+- name: Install TensorFlow
+  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
+  become: yes
 
 - set_fact: cassandra_seeds="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
   with_items: "{{ groups['dse'] }}"
@@ -63,8 +85,22 @@
 # These files are only needed when connecting to AWS workers, BUT some might be local
 # NOTE: LOCAL_ACTION
 - name: Copy scripts and variables to admin node
-  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777 force=no
   with_items:
-    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook.sh"}
-    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start.R"}
+    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook-AWS.sh"}
+    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start-AWS.R"}
     - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
+
+- name: Create spark-kernel for AWS directory
+  file: path=/home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS state=directory owner={{ admin_user }} group={{ admin_user }}
+
+- name: Create symlink to spark-kernel for AWS
+  file:
+    src: /home/{{ admin_user }}/apps/spark-kernel/logo-64x64.png
+    path: /home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS/logo-64x64.png
+    state: link
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
+
+- name: Copy kernel.json for AWS
+  template: src=spark-kernel.json.j2 dest=/home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS/kernel.json owner={{ admin_user }} group={{ admin_user }} force=yes

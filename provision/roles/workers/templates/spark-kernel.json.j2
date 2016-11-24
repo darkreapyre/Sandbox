@@ -1,6 +1,6 @@
 {
-  "resources_dir": "/home/{{ admin_user }}/.local/share/jupyter/kernels/scala/",
-  "display_name": "Scala 2.10 (Spark Local)",
+  "resources_dir": "/home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS/",
+  "display_name": "Scala 2.10 (Spark AWS)",
   "language_info": { "name": "scala" },
   "argv": [
     "/home/{{ admin_user }}/apps/spark-kernel/bin/spark-kernel",
@@ -9,7 +9,7 @@
   ],
   "codemirror_mode": "scala",
   "env": {
-    "SPARK_OPTS": "--master={{ master }} --jars /home/{{ admin_user }}/apps/spark-cassandra-connector-uber.jar  --packages=com.databricks:spark-csv_2.10:1.4.0 --driver-java-options=-Xms1024M --driver-java-options=-Xmx8192M --driver-java-options=-Dlog4j.logLevel=trace",
+    "SPARK_OPTS": "--master={{ master }} --jars /home/{{ admin_user }}/apps/spark-cassandra-connector-uber.jar --conf spark.cassandra.connection.host={{ hostvars[groups['dse'][0]].ansible_default_ipv4.address }} --packages=com.databricks:spark-csv_2.10:1.4.0 --driver-java-options=-Xms1024M --driver-java-options=-Xmx8192M --driver-java-options=-Dlog4j.logLevel=trace",
     "MAX_INTERPRETER_THREADS": "16",
     "SPARK_CONFIGURATION": "spark.cores.max=11",
     "CAPTURE_STANDARD_OUT": "true",
