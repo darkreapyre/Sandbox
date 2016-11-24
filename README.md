@@ -1,18 +1,51 @@
-# WORK IN PROGRESS!!!!!!!!!!!!
-This repository contains four branches, based on a specific use case. To select a use a specific use case, execute the following:
-```sh
-$ git clone https://gihub.com/darkreapyre/Sandbox.git <your_folder>
-$ git checkout <branch>
-```
+# Setting up the SMACK stack and a sample app with DC/OS
 
-## Local Branch
-The *Local* branch provides a small Spark cluster along with the relevant Data Science tools (like Jupyter Notebook and RStudio) to explore and test Big Data analytics in a local setting.
+## Prerequesites
 
-## Hybrid Branch
-The *Hybrid* branch provides a fully functioning __Admin__ node with the relevant Data Science tools (Jupyter Notebook, RStudio and Zeppelin), along with a local Spark implementation for testing. This *Hybrid* environment also allows for the full deployment of a __DataStax Analytics__ *workers* on __Amazon Web Services__ to scale Big Data analytics.
+- install Vagrant and Virtualbox
+- install Ansible
+- get an an AWS Account. The AWS resources used in this example exceed the free tier, regular AWS fees apply. You have been warned!
+- Create an EC2 key pair called dcos-intro
+- A Twitter access key
 
-## vSphere Branch
-The *vSphere* branch provides a subset of the __SMACK__ stack (without **Mesos**), along with the relevant Data Science tools on __VMware vSphere__ to test and scale Big Data analytics within the __SDDC__.
+## Environment variables
 
-## AWS Branch
-The *AWS* branch provides a subset of the __SMACK__ stack (without **Mesos**), along with the relevant Data Science tolls and **Apache Flink** to test and scale Big Data analytics on __Amazonn Web Services__.
+Export
+- DCOS_INTRO_AWS_REGION, e.g. with "eu-central-1"
+- DCOS_INTRO_AWS_ACCESS_KEY, your AWS access key
+- DCOS_INTRO_AWS_SECRET_KEY, your AWS secret key
+
+
+
+## Setup SMACK Frameworks
+
+- SSH into Vagrant box (vagrant ssh)
+- call /vagrant/provisioning/install-smack-frameworks.sh
+
+## Wait
+- Wait in Marathon (http://<master_load_balancer>/marathon) until all apps are healthy
+
+## Setup Kafka brokers and topics
+- call /vagrant/provisioning/setup-kafka-broker-and-topic.sh
+
+## Setup Cassandra keyspace and schema
+- SSH into the master node on AWS
+- Start cqlsh with ``docker run -ti cassandra:2.2.5 cqlsh node-0.cassandra.mesos``
+- Execute the two lines from /vagrant/provisioning/cassandra.cql
+
+## Start ingestion job
+- edit /vagrant/provisioning/ingestion.json to add your twitter credentials
+- Call /vagrant/provisioning/deploy-ingestion.sh
+
+## Start digestion job
+- Call /vagrant/provisioning/deploy-digestion.sh
+
+
+## Build Fat Jar for example
+- cd into "example"
+- call ``sbt assembly``
+- Fat Jar will contain both Spark job and ingestion job. You would not have this normally, this is a simplification for
+  the sake of the example
+
+## Create Docker container
+- call ``sbt docker``
