@@ -1,1 +1,1 @@
-link
+[The __SMACK__ stack - hands on!] (https://blog.codecentric.de/en/2016/04/smack-stack-hands/)
