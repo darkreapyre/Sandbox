@@ -60,4 +60,11 @@
 - name: Start Datastax Enterprise
   service: name=dse enabled=yes state=started
 
-- include: notebook.yml
+# These files are only needed when connecting to AWS workers, BUT some might be local
+# NOTE: LOCAL_ACTION
+- name: Copy scripts and variables to admin node
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777
+  with_items:
+    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook.sh"}
+    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start.R"}
+    - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}

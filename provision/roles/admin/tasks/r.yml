@@ -12,7 +12,8 @@
     repo: "{{item.type}} {{item.url}}"
     state: present
     update_cache: true
-  with_items: r_repository #<-- Using bare variables; try "{{ r_repository }}""
+  with_items: "{{ r_repository }}"
+#  with_items: r_repository #<-- Using bare variables; try "{{ r_repository }}""
 
 - name: Install R
   apt: pkg=r-base state=present
