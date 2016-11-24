@@ -1,5 +1,5 @@
 ---
-- name: Install Dependencies
+- name: Install Python Dependencies
   apt: pkg={{ item }} state=present
   with_items:
     - build-essential
