@@ -8,8 +8,8 @@ This document details the process of setting up an ansible control node with `Va
 - Python 2.7
 - Scala 2.10.5
 - R __VERSION TBC__
-- RStudio Server 0.99.491 __VERSION TBC__
-- RStudio Shiny Server 1.4.1.759 __TBC__
+- RStudio Server 1.0.44
+- RStudio Shiny Server 1.5.1.834
 - Java 8 __VERSION TBC__
 - DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBC__, Spark 1.6.1 and Solr __VERSION TBC__)
 - DataStax Opscenter 6.0
