@@ -16,7 +16,7 @@
 #  with_items: r_repository #<-- Using bare variables; try "{{ r_repository }}""
 
 - name: Install R
-  apt: pkg=r-base state=present
+  apt: pkg={{item}} state=present
   with_items:
     - r-base
     - r-base-dev
