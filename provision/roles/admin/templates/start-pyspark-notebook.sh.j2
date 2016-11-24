@@ -13,7 +13,6 @@ umask 0077
 
 DEFAULT_SUBMIT_ARGS="--driver-memory $DRIVER_MEMORY --num-executors $NUM_EXECUTORS --executor-cores $EXECUTOR_CORES --executor-memory $EXECUTOR_MEMORY"
 SPARK_PACKAGES="com.databricks:spark-csv_2.10:1.4.0,datastax:spark-cassandra-connector:1.6.0-s_2.10"
-#CASSANDRA_CONF="spark.cassandra.connection.host={{ hostvars[groups['dse'][0]].ansible_default_ipv4.address }}"
 PYSPARK_SUBMIT_ARGS="--master $MASTER --packages $SPARK_PACKAGES --conf $CASSANDRA_CONF $DEFAULT_SUBMIT_ARGS"
 
 export PYSPARK_PYTHON=python
