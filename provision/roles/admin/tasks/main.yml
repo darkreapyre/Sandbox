@@ -53,6 +53,7 @@
     - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start-local.R"}
     - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
   
+- include: java.yml
 - include: python.yml
 - include: scala.yml
 - include: ruby.yml
