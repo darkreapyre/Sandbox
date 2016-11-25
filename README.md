@@ -4,14 +4,14 @@ __WORK IN PROGRESS!__
 This document details the process of setting up an ansible control node with `Vagrant` and connecting to an __Amazon Web Services (AWS)__ environment to configure a virtualized Big Data ecosystem for the purpose of using it during Data Science and Machine Learning. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:
 
 - Jupyter __VERSION TBC__
-- Zeppelin 0.7-SNAPSHOT __VERSION TBC__
+- Zeppelin 0.7-SNAPSHOT
 - Python 2.7
 - Scala 2.10.5
 - R 3.3.2
 - RStudio Server 1.0.44
 - RStudio Shiny Server 1.5.1.834
 - Java 8 __VERSION TBC__
-- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph __VERSION TBC__, Spark 1.6.1 and Solr __VERSION TBC__)
+- DataStax Enterprise 5.0.1 (incl. Cassandra 3.0; Titan Graph, Spark 1.6.1 and Solr)
 
 This documnet further details some of the additional processes and tools used in order to fully leverage the architecture, 
 
@@ -19,7 +19,7 @@ This documnet further details some of the additional processes and tools used in
 ### Requirements
 The following are the components required and have been tested:
 
-1. An AWS environment (not free tier).
+1. An AWS billable environment.
 2. Vagrant 1.8.7.
 3. VirtualBox 5.0.28 r111378 (MacOS).
 4. VirtualBox Extension Pack 5.0.28 r111378.
