@@ -42,7 +42,7 @@
   - python-software-properties
 
 - name: Add Oracle Java Repository
-  shell: add-apt-repository -y ppa:webupd8team/java
+  apt_repository: repo='ppa:webupd8team/java'
 
 - name: Add Datastax Repository
   shell: echo "deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main" | sudo tee -a /etc/apt/sources.list.d/datastax.sources.list
@@ -50,15 +50,17 @@
 - name: Add Datastax Repository Key
   apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
 
-- name: Update Hosts
+- name: Update Host
   apt: update_cache=yes
 
 - name: Accept Java License
-#  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
   shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 
 - name: Install Oracle Java 8
-  shell: DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer oracle-java8-set-default
+  apt: pkg={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
 
 - name: Install Datastax Enterprise
   apt: pkg=dse-full={{ dse_version }} state=installed update-cache=yes
