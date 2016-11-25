@@ -1,6 +1,9 @@
 ---
+#- name: Add Oracle Java Repository
+#  shell: add-apt-repository -y ppa:webupd8team/java8
+
 - name: Add Oracle Java Repository
-  shell: add-apt-repository -y ppa:webupd8team/java8
+  apt_repository: repo='ppa:webupd8team/java'
 
 - name: Update Host
   apt: update_cache=yes
