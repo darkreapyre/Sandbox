@@ -43,5 +43,7 @@
     - networkx
     - sympy
     - cassandra-driver
+    - pdfkit
+    - hide_code
 
 
