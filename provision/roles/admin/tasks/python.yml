@@ -33,7 +33,7 @@
     - tmux
 
 - name: Install additional Python libraries
-  pip: name={{ item }} state=present
+  pip: name={{ item }} state=latest
   with_items:
     - pygments
     - jsonschema
@@ -45,5 +45,6 @@
     - cassandra-driver
     - pdfkit
     - hide_code
+    - PILLOW
 
 
