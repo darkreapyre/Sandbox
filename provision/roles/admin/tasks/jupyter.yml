@@ -46,7 +46,7 @@
   become_user: "{{ admin_user }}"
 
 - name: Enable nbextensions_contributor
-  shell: "jupyter nbextensions_copnfigurator enable --user"
+  shell: "jupyter nbextensions_configurator enable --user"
   become_user: "{{ admin_user }}"
 
 - name: Install hide_code extension
