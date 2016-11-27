@@ -4,7 +4,8 @@
   become: yes
 
 - name: Install build dependecies for scipy
-  command: apt-get build-dep -y python-scipy
+  apt: pkg=python-scipy state=build-dep
+  become: yes
 
 - name: Install common packages
   apt: pkg={{ item }} state=present
@@ -16,7 +17,7 @@
 - name: Install common Python libraries
   pip: name={{ item }} state=present
   with_items:
-    - scikit-learn=0.17
+    - scikit-learn==0.17 #<-- specifically need version 0.17 for this version of the Sandbox
     - Theano
     - spark-sklearn
     - keras

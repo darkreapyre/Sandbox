@@ -6,7 +6,7 @@
   apt: update_cache=yes
 
 - name: Install build dependecies for matplotlib
-  command: apt-get build-dep -y python-matplotlib
+  apt: pkg=python-matplotlib state=build-dep
 
 - name: Install Python Dependencies
   apt: pkg={{ item }} state=present
