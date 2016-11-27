@@ -9,7 +9,7 @@
   command: apt-get build-dep -y python-matplotlib
 
 - name: Install Python Dependencies
-  apt: pkg={{ item }} state=latest
+  apt: pkg={{ item }} state=present
   with_items:
     - build-essential
     - python-dev
@@ -23,8 +23,8 @@
     - libjpeg8-dev
     - zlib1g-dev
 #    - python-matplotlib
-    - python-numpy
-    - python-pandas
+#    - python-numpy
+#    - python-pandas
     - texlive
     - texlive-latex-extra
     - pandoc
@@ -36,7 +36,7 @@
     - tmux
 
 - name: Install additional Python libraries
-  pip: name={{ item }} state=latest
+  pip: name={{ item }} state=present
   with_items:
     - matplotlib
     - pygments
