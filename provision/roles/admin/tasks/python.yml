@@ -5,6 +5,9 @@
 - name: Update Host
   apt: update_cache=yes
 
+- name: Install build dependecies for matplotlib
+  command: apt-get build-dep -y python-matplotlib
+
 - name: Install Python Dependencies
   apt: pkg={{ item }} state=latest
   with_items:
@@ -19,7 +22,7 @@
     - libtiff5-dev
     - libjpeg8-dev
     - zlib1g-dev
-    - python-matplotlib
+#    - python-matplotlib
     - python-numpy
     - python-pandas
     - texlive
@@ -35,6 +38,7 @@
 - name: Install additional Python libraries
   pip: name={{ item }} state=latest
   with_items:
+    - matplotlib
     - pygments
     - jsonschema
     - mpld3
