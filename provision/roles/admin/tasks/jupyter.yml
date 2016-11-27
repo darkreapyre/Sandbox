@@ -34,11 +34,11 @@
   become_user: "{{ admin_user }}"
 
 - name: Install Jupyter nbextensions for Python 2
-  shell: "pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  shell: "sudo pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
   become_user: "{{ admin_user }}"
 
 - name: Install Jupyter nbextensions for Python 3
-  shell: "pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  shell: "sudo pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
   become_user: "{{ admin_user }}"
 
 - name: Enable nbextensions
