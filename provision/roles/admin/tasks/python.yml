@@ -6,7 +6,7 @@
   apt: update_cache=yes
 
 - name: Install Python Dependencies
-  apt: pkg={{ item }} state=present
+  apt: pkg={{ item }} state=latest
   with_items:
     - build-essential
     - python-dev

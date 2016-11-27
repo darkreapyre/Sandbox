@@ -11,7 +11,7 @@
   become: yes
 
 - name: Install common Python libraries
-  pip: name={{ item }} state=present
+  pip: name={{ item }} state=latest
   with_items:
     - scikit-learn
     - Theano
