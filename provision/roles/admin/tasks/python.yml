@@ -48,7 +48,6 @@
     - sympy
     - cassandra-driver
     - pdfkit
-    - hide_code
     - PILLOW
 
 
