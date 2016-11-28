@@ -34,12 +34,16 @@
   become_user: "{{ admin_user }}"
 
 - name: Install Jupyter nbextensions for Python 2
-  shell: "sudo pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  shell: "pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  become: yes
   become_user: "{{ admin_user }}"
+  become_method: sudo
 
 - name: Install Jupyter nbextensions for Python 3
   shell: "sudo pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  become: yes
   become_user: "{{ admin_user }}"
+  become_method: sudo
 
 - name: Enable nbextensions
   shell: "jupyter contrib nbextension install --user"
@@ -49,8 +53,8 @@
   shell: "jupyter nbextensions_configurator enable --user"
   become_user: "{{ admin_user }}"
 
-- name: Install hide_code extension
-  pip: name=hide_code state=present
+#- name: Install hide_code extension
+#  pip: name=hide_code state=present
 
 # The following need to be researched as the destination directory doesn't exist in jupyter.
 #- name: Disable notebook warnings
