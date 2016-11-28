@@ -49,5 +49,6 @@
     - cassandra-driver
     - pdfkit
     - PILLOW
+    - boto
 
 
