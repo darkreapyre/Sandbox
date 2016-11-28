@@ -50,7 +50,7 @@
   become_user: "{{ admin_user }}"
 
 - name: Install hide_code extension
-  pip: name=hide_code state=latest
+  pip: name=hide_code state=present
 
 # The following need to be researched as the destination directory doesn't exist in jupyter.
 #- name: Disable notebook warnings
