@@ -17,7 +17,7 @@
 - name: Install common Python libraries
   pip: name={{ item }} state=present
   with_items:
-    - scikit-learn==0.17 #<-- specifically need version 0.17 for this version of the Sandbox
+    - scikit-learn
     - Theano
     - spark-sklearn
     - keras
