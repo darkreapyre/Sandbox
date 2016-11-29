@@ -22,9 +22,6 @@
     - libtiff5-dev
     - libjpeg8-dev
     - zlib1g-dev
-#    - python-matplotlib
-#    - python-numpy
-#    - python-pandas
     - texlive
     - texlive-latex-extra
     - pandoc
