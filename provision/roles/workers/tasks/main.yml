@@ -3,6 +3,10 @@
   apt: update_cache=yes
   become: yes
 
+- name: Install build dependecies for scipy
+  apt: pkg=python-scipy state=build-dep
+  become: yes
+
 - name: Install common packages
   apt: pkg={{ item }} state=present
   with_items:
