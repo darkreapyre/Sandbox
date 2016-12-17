@@ -74,7 +74,8 @@
 # Mnaually install pygame if needed
 
 # Manually configure X if needed (as admin_user)
-# sudo apt-get install -y xinit unity gnome ubuntu-desktop
-
+## sudo apt-get install -y xinit unity gnome ubuntu-desktop
+# sudo apt-get install xfce4
+# sudo startxfce4&
 
 # Install zeppelin

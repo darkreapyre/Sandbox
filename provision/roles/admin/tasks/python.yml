@@ -31,6 +31,7 @@
     - libfontconfig
     - gdebi-core
     - tmux
+    - python-pygame
 
 - name: Install additional Python libraries
   pip: name={{ item }} state=present
