@@ -28,8 +28,8 @@
     - libcurl4-openssl-dev
 
 - name: Install devtools package required for installing R packages from github
-#  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('devtools' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('devtools'), repos=c('{{r_packages_repos}}'))"
-  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "install.packages(pkgs=c('devtools'), repos=c('{{ r_packages_repos }}'))"
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('devtools' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('devtools'), repos=c('{{r_packages_repos}}'))"
+#  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "install.packages(pkgs=c('devtools'), repos=c('{{ r_packages_repos }}'))"
 
 - name: Load devtools package
   shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "library(devtools)"

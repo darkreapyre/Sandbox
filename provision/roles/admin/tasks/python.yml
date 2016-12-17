@@ -30,9 +30,9 @@
     - python-mpltoolkits.basemap
     - libfontconfig
     - gdebi-core
-    - tmux
-    - python-pygame
-    - xfce4
+    - tmux #<-- Use in place of screen
+    - python-pygame #<-- For Python reinforcment lerning
+    - xfce4 #<-- To test Python reinforcement learning
 
 - name: Install additional Python libraries
   pip: name={{ item }} state=present
@@ -48,7 +48,7 @@
     - sympy
     - node
     - cassandra-driver
-    - pdfkit
+    - pdfkit #<-- For jupyter hide_code
     - PILLOW
     - boto3
 
