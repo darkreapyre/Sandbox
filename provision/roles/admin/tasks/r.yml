@@ -16,11 +16,10 @@
 #  with_items: r_repository #<-- Using bare variables; try "{{ r_repository }}""
 
 - name: Install R
-#  apt: pkg={{item}} state=present
-  apt: pkg=r-base state=installed
-#  with_items:
-#    - r-base
-#    - r-base-dev
+  apt: pkg={{item}} state=present
+  with_items:
+    - r-base
+    - r-base-dev
 
 - name: openssl and libcurl required for R devtools package
   apt: pkg={{item}} state=present
@@ -29,7 +28,8 @@
     - libcurl4-openssl-dev
 
 - name: Install devtools package required for installing R packages from github
-  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('devtools' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('devtools'), repos=c('{{r_packages_repos}}'))"
+#  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('devtools' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('devtools'), repos=c('{{r_packages_repos}}'))"
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "install.packages(pkgs=c('devtools'), repos=c('{{ r_packages_repos }}'))"
 
 # knitr will also pull in the `evaluate` R package as a dependency
 - name: Install knitr package required for Zeppelin R interpreter/kernel
