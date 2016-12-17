@@ -68,5 +68,9 @@
 - include: rstudio-server.yml
 - include: rstudio-shiny.yml
 
-# TO-DO
-#- include: zeppelin.yml
+# Next Steps:
+# Manually configure sklesrn version (0.17 or 0.18)
+# Mnaually configure `hide-code` for jupyter
+# Mnaually install pygame if needed
+# Manually configure X if needed
+# Install zeppelin
