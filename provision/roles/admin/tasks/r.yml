@@ -31,6 +31,9 @@
 #  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('devtools' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('devtools'), repos=c('{{r_packages_repos}}'))"
   shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "install.packages(pkgs=c('devtools'), repos=c('{{ r_packages_repos }}'))"
 
+- name: Load devtools package
+  shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "library(devtools)"
+
 # knitr will also pull in the `evaluate` R package as a dependency
 - name: Install knitr package required for Zeppelin R interpreter/kernel
   shell: /usr/bin/Rscript --slave --no-save --no-restore-history -e "if (! ('knitr' %in% installed.packages()[,'Package'])) install.packages(pkgs=c('knitr'), repos=c('{{r_packages_repos}}'))"
