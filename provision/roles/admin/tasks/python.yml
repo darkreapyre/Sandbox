@@ -32,6 +32,7 @@
     - gdebi-core
     - tmux
     - python-pygame
+    - xfce4
 
 - name: Install additional Python libraries
   pip: name={{ item }} state=present
