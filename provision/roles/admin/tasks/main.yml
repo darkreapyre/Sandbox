@@ -72,5 +72,9 @@
 # Manually configure sklesrn version (0.17 or 0.18)
 # Mnaually configure `hide-code` for jupyter
 # Mnaually install pygame if needed
-# Manually configure X if needed
+
+# Manually configure X if needed (as admin_user)
+# sudo apt-get install -y xinit unity gnome ubuntu-desktop
+
+
 # Install zeppelin
