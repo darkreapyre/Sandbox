@@ -50,5 +50,5 @@
     - cassandra-driver
     - pdfkit #<-- For jupyter hide_code
     - PILLOW
-    - boto3
+    - boto3 #<-- For AWS provisioning
 
