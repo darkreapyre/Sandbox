@@ -5,6 +5,6 @@ c.NotebookApp.ip = '*'
 c.NotebookApp.port = 8001
 c.NotebookApp.open_browser = False
 c.NotebookApp.notebook_dir = '/home/{{ admin_user }}/notebooks'
-c.NotebookApp.password = u'sha512:{{ admin_pass |password_hash('sha1') }}'
+c.NotebookApp.password = u'sha1:{{ admin_pass |hash('sha1') }}'
 #c.NotebookApp.token = ''
 #c.NotebookApp.password = ''
