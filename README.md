@@ -1,7 +1,7 @@
 # Installing. Data Science Admin Node on a local machine (with DataStax Analytics on AWS).
 __WORK IN PROGRESS!__  
 ## Introduction
-This document details the process of setting up an ansible control node with `Vagrant` and connecting to an __Amazon Web Services (AWS)__ environment to configure a virtualized Big Data ecosystem for the purpose of using it during Data Science and Machine Learning. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:
+This document details the process of setting up an ansible control node (*admin* node) with `Vagrant`. The *admin* node has all the necessary libries installed to execute a Data Science methodology locally in order to analyze data and build and test various models. The *admin* node further allows for connecting to an __Amazon Web Services (AWS)__ environment to configure a virtualized Big Data ecosystem for the purpose of testing the analysis and models at scale. It further details how to leverage the ansible control node to build out the environment using __ansible playbooks__ with the following:
 
 - Jupyter __VERSION TBC__
 - Zeppelin 0.7-SNAPSHOT
