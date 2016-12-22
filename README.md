@@ -15,4 +15,4 @@ The *Hybrid* branch provides a fully functioning __Admin__ node with the relevan
 The *vSphere* branch provides a subset of the __SMACK__ stack (without **Mesos**), along with the relevant Data Science tools on __VMware vSphere__ to test and scale Big Data analytics within the __SDDC__.
 
 ## AWS Branch
-The *AWS* branch provides a subset of the __SMACK__ stack (without **Mesos**), along with the relevant Data Science tolls and **Apache Flink** to test and scale Big Data analytics on __Amazonn Web Services__.
+The *AWS* branch provides a subset of the __SMACK__ stack (without **Mesos**), along with the relevant Data Science tolls and **Apache Flink** to test and scale Big Data analytics on __Amazon Web Services__.
