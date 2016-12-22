@@ -14,11 +14,12 @@ These phases will be implemented by leveraging a number of Infrastructure as Cod
 Additionally, the objective of this implementation is to leverage the Command-line (CLI) tools, scripts and an AWS WorKSpaces in order to provide an advanced user experience over the AWS Console.
 
 #### Pre-requisites
-
 To start, the following components must be configured or installed.
+
 1. AWS Account.
 2. AWS WorkSpaces desktop: This avoids ubiquity or working behinds firewalls/proxies etc. and allows a simulated approach to a customers’ environment. 
 3. AWS Command Line Interface (CLI) for Windows.
+
 >Note: When installing the 64-bit AWS CLI on AWS WorkSpaces, there may be errors citing code 2503. These errors can be corrected by [this](http://winaero.com/blog/fix-msi-installer-errors-2502-and-2503-in-windows-10-windows-8-1-and-windows-7/) procedure .
 
 4. [Git client for Windows](https://git-scm.com/).
