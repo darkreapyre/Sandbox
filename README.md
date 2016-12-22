@@ -20,5 +20,6 @@ To start, the following components must be configured or installed.
 2. AWS WorkSpaces desktop: This avoids ubiquity or working behinds firewalls/proxies etc. and allows a simulated approach to a customers’ environment. 
 3. AWS Command Line Interface (CLI) for Windows.
 >Note: When installing the 64-bit AWS CLI on AWS WorkSpaces, there may be errors citing code 2503. These errors can be corrected by [this](http://winaero.com/blog/fix-msi-installer-errors-2502-and-2503-in-windows-10-windows-8-1-and-windows-7/) procedure .
+
 4. [Git client for Windows](https://git-scm.com/).
 5. [PuTTY and PuTTYgen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
