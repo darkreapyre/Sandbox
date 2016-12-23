@@ -49,7 +49,8 @@ From the Windows command prompt, type `aws configure`. The CLI will prompt for t
 ### Step 2: Create a Security Group for the EC2 Instance
 The next step is to configure the pre-requisites for launching an EC2 instance in order for it to be accessible. From the command prompt execute:
 ```
-aws ec2 create-security-group --group-name devenv-sg --description "Security Group for DSIoT Phase-1 Architecture"
+> aws ec2 create-security-group --group-name devenv-sg \
+--description "Security Group for DSIoT Phase-1 Architecture"
 ```
 >**Note:** The output from the above command will be the randomly generated security group ID. Make sure to take note of the ID for future steps.
 
@@ -118,7 +119,7 @@ Confirm the suffix for the AMI and EIP
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
 
 ### Step 10: Connecting to the **admin** node
-Now that the **Admin** node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
+Now that the **admin** node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
 - Navigate to the location of the `devenv-key.pem` file and execute the following:
 ```
@@ -127,4 +128,4 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-### Step 11: Getting the deployment code
+## Preparing for Deployment
