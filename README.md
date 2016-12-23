@@ -127,4 +127,4 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-### Step 11: Gettiong the code
+### Step 11: Getting the deployment code
