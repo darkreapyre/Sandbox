@@ -38,30 +38,37 @@ From the Windows command prompt, type `aws configure`. The CLI will prompt for t
 - **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the **admin** instance.
 - **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the **admin** instance.
 - **Default region name:** This is the AWS region where the **admin** instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
-- **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI. 
+- **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI.
+
 >**Note:** To configure multiple profiles, named profiles can be configured with the `--profile <profile name>` option. Additionally, to change any of the above options, simply run `aws configure` again.
+
 ### Step 2: Create a Security Group for the EC2 Instance
 The next step is to configure the pre-requisites for launching an EC2 instance in order for it to be accessible. From the command prompt execute:
 ```
 aws ec2 create-security-group --group-name devenv-sg --description "Security Group for DSIoT Phase-1 Architecture"
 ```
 >**Note:** The output from the above command will be the randomly generated security group ID. Make sure to take note of the ID for future steps.
+
 ### Step 3: Allow incoming traffic over port 22 for SSH
 The next step is to authorize the newly created security group to accept **incoming** traffic via tcp port 22, the default port for SSH. Execute the following to accomplish this:
 ```
 aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidrr 0.0.0.0/0
 ```
+
 >**Note:** The Obote command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
+
 ### Step 4: Confirm the security group configuration
 To get an overview of the security group configuration for the instance, execute the following:
 ```
 aws ec2 describe-security-groups
 ```
+
 ### Step 5: Create the key pair to connect to the EC2 instance
 Even though the security group allows a SSH connection from any network, a private key is still required too access the EC2 instance. To create the key pair and save it to a file called `devenv-key.pem`, execute the following:
 ```
 aws create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
 ```
+
 ### Step 6: Find the Amazon Image ID (AMI) for the **admin** node
 For the **Admin** node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
@@ -71,6 +78,7 @@ aws ec2 describe-images --owners amazonm --filters "Name-root-device-type,Values
 Make sure to execute the above and double check what the output is so as to add it to the comments below
 --->
 From the output of the above command, take note of the latest AMI ID for the `t2.micro` instance.
+
 ### Step 7:  Launch the **admin** node instance
 Using both the `t2.micro` AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
 <!---
@@ -81,7 +89,9 @@ aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX 
 --key-name devenv-key --query "Instances[0].InstanceId"
 ```
 The output from the above command will be the output the newly created instance I'd of the **admin** node. Make sure to take note of it for future usage.
+
 >**Note:** *ami-XXXXXXXX* and *sg-XXXXXXXX* should be replaced with the output from **Step 6** and **Step 4** respectively.
+
 ### Step 8: Allocate an Elastic IP Address for EC2-VPC
 Since the `t2.micro` instance type requires a VPC and considering that the **admin** node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
 ```
@@ -91,6 +101,7 @@ The output from the above command will be the `PublicIp` assigned to the *devenv
 ```
 aws ec2 describe-addresses --filters "Name=Domain,Values=vpc"
 ```
+
 ### Step 9: Associating the Elastic IP with the **admin** node
 To associate the Elastic IP to the running **admin** node instance, execute the following:
 ```
@@ -99,7 +110,9 @@ aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXX
 <!---
 Confirm the suffix for the AMI and EIP
 --->
+
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
+
 ### Step 10: Connecting to the **admin** node
 Now that the **Admin** node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
@@ -107,5 +120,7 @@ Now that the **Admin** node has been created, it up and running and has a public
 ```
 $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 ```
+
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
+
 ### Step 11: Gettiong the code
