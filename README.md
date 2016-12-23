@@ -18,7 +18,9 @@ Additionally, the objective of this implementation is to leverage the Command-li
 # Pre-requisites
 To start, the following components must be configured or installed: 
 - [AWS Account](https://aws.amazon.com).
+
 >**Note:** The resources required to run this architecture are beyond the scope of the [AWS Free Tier](https://aws.amazon.com/free/).
+
 - Amazon [WorkSpaces](https://aws.amazon.com/workspaces/) virtual desktop: This avoids the complication of having to work behind firewalls/proxies etc. and allows for a more simulated approach to a customers’ environment. 
 - AWS Command Line Interface (CLI) for [Windows](https://s3.amazonaws.com/aws-cli/AWSCLI64.msi).
 
