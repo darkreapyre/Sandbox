@@ -19,7 +19,9 @@ To start, the following components must be configured or installed:
 >**Note:** The resources required to run this architecture are beyond the scope of the [AWS Free Tier](https://aws.amazon.com/free/).
 - Amazon [WorkSpaces](https://aws.amazon.com/workspaces/) virtual desktop: This avoids the complication of having to work behind firewalls/proxies etc. and allows for a more simulated approach to a customers’ environment. 
 - AWS Command Line Interface (CLI) for [Windows](https://s3.amazonaws.com/aws-cli/AWSCLI64.msi).
+
 >**Note:** When installing the 64-bit AWS CLI on AWS WorkSpaces, there may be errors citing code *2503* and/or *2505*. These errors can be corrected by [this](http://winaero.com/blog/fix-msi-installer-errors-2502-and-2503-in-windows-10-windows-8-1-and-windows-7/) procedure .
+
 - [Git client for Windows](https://git-scm.com/).
 - [PuTTY and PuTTYgen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
 - A basic familiarity with using core AWS services particularly:
