@@ -57,7 +57,7 @@ The next step is to configure the pre-requisites for launching an EC2 instance i
 ### Step 3: Allow incoming traffic over port 22 for SSH
 The next step is to authorize the newly created security group to accept **incoming** traffic via tcp port 22, the default port for SSH. Execute the following to accomplish this:
 ```
-aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidrr 0.0.0.0/0
+> aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidrr 0.0.0.0/0
 ```
 
 >**Note:** The above command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
@@ -65,19 +65,19 @@ aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --por
 ### Step 4: Confirm the security group configuration
 To get an overview of the security group configuration for the instance, execute the following:
 ```
-aws ec2 describe-security-groups
+> aws ec2 describe-security-groups
 ```
 
 ### Step 5: Create the key pair to connect to the EC2 instance
 Even though the security group allows a SSH connection from any network, a private key is still required too access the EC2 instance. To create the key pair and save it to a file called `devenv-key.pem`, execute the following:
 ```
-aws create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
+> aws create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
 ```
 
 ### Step 6: Find the Amazon Image ID (AMI) for the **admin** node
 For the **Admin** node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
-aws ec2 describe-images --owners amazonm --filters "Name-root-device-type,Values=ebs"
+> aws ec2 describe-images --owners amazonm --filters "Name-root-device-type,Values=ebs"
 ```
 <!---
 Make sure to execute the above and double check what the output is so as to add it to the comments below
@@ -90,7 +90,7 @@ Using both the `t2.micro` AMI ID noted above and the Security Group ID from **St
 Make sure to to run the describe-instances command to replace the X's below with the actual instance ID
 --->
 ```
-aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro \
+> aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro \
 --key-name devenv-key --query "Instances[0].InstanceId"
 ```
 The output from the above command will be the output the newly created instance I'd of the **admin** node. Make sure to take note of it for future usage.
@@ -100,17 +100,17 @@ The output from the above command will be the output the newly created instance 
 ### Step 8: Allocate an Elastic IP Address for EC2-VPC
 Since the `t2.micro` instance type requires a VPC and considering that the **admin** node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
 ```
-aws ec2 allocate-address --domain vpc
+> aws ec2 allocate-address --domain vpc
 ```
 The output from the above command will be the `PublicIp` assigned to the *devenv* as well as the `AllocationId`. Make sure to take note of both of these as they will be required for future use. If for some reason reference to these id's are lost or forgotten, use the following command to view the information:
 ```
-aws ec2 describe-addresses --filters "Name=Domain,Values=vpc"
+> aws ec2 describe-addresses --filters "Name=Domain,Values=vpc"
 ```
 
 ### Step 9: Associating the Elastic IP with the **admin** node
 To associate the Elastic IP to the running **admin** node instance, execute the following:
 ```
-aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
+> aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
 ```
 <!---
 Confirm the suffix for the AMI and EIP
