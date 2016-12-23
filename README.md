@@ -4,7 +4,9 @@ This document outlines the steps/procedures taken to design, implement and manag
 This phase will involve initially porting the legacy Data Science [“Sandbox”](https://github.com/darkreapyre/Sandbox) onto AWS.
 #### Phase 2: Containers
 This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to Docker containers.
-#### Phase 3: Serverless
+#### Phase 3: Mesosphere
+This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
+#### Phase 4: Serverless
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
@@ -56,7 +58,7 @@ The next step is to configure the pre-requisites for launching an EC2 instance i
 ### Step 3: Allow incoming traffic over port 22 for SSH
 The next step is to authorize the newly created security group to accept **incoming** traffic via tcp port 22, the default port for SSH. Execute the following to accomplish this:
 ```
-> aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidrr 0.0.0.0/0
+> aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
 ```
 
 >**Note:** The above command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
