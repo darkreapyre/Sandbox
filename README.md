@@ -7,10 +7,12 @@ This phase involves taking said architecture and porting it from an infrastructu
 #### Phase 3: Serverless
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
+
 1. [Vagrant](https://www.vagrantup.com)
 2. [Ansible](https://www.ansible.com)
 3. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
 4. [TerraForm](https://www.terraform.io)
+
 Additionally, the objective of this implementation is to leverage the Command-line (CLI) tools, scripts and an AWS WorKSpaces in order to provide an advanced user experience over and above using the AWS Console.
 
 # Pre-requisites
