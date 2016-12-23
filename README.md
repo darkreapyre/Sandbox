@@ -36,7 +36,7 @@ From the Windows command prompt, type `aws configure`. The CLI will prompt for t
 - **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the **admin** instance.
 - **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the **admin** instance.
 - **Default region name:** This is the AWS region where the **admin** instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
-- **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for *Step 1*, to have the output formatted as `text` to better familiarize oneself with using the CLI.
+- **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI. 
 >**Note:** To configure multiple profiles, named profiles can be configured with the `--profile <profile name>` option. Additionally, to change any of the above options, simply run `aws configure` again.
 ### Step 2: Create a Security Group for the EC2 Instance
 The next step is to configure the pre-requisites for launching an EC2 instance in order for it to be accessible. From the command prompt execute:
