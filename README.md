@@ -59,7 +59,7 @@ The next step is to authorize the newly created security group to accept **incom
 aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidrr 0.0.0.0/0
 ```
 
->**Note:** The Obote command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
+>**Note:** The above command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
 
 ### Step 4: Confirm the security group configuration
 To get an overview of the security group configuration for the instance, execute the following:
