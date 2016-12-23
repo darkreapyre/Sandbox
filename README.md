@@ -49,8 +49,7 @@ From the Windows command prompt, type `aws configure`. The CLI will prompt for t
 ### Step 2: Create a Security Group for the EC2 Instance
 The next step is to configure the pre-requisites for launching an EC2 instance in order for it to be accessible. From the command prompt execute:
 ```
-> aws ec2 create-security-group --group-name devenv-sg \
---description "Security Group for DSIoT Phase-1 Architecture"
+> aws ec2 create-security-group --group-name devenv-sg --description "Security Group for DSIoT Phase-1 Architecture"
 ```
 >**Note:** The output from the above command will be the randomly generated security group ID. Make sure to take note of the ID for future steps.
 
@@ -90,8 +89,7 @@ Using both the `t2.micro` AMI ID noted above and the Security Group ID from **St
 Make sure to to run the describe-instances command to replace the X's below with the actual instance ID
 --->
 ```
-> aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro \
---key-name devenv-key --query "Instances[0].InstanceId"
+> aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
 ```
 The output from the above command will be the output the newly created instance I'd of the **admin** node. Make sure to take note of it for future usage.
 
