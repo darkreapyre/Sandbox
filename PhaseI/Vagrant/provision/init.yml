@@ -1,0 +1,55 @@
+# Initialization Template
+# Save as init.yml when completed
+# Total number of Virtual Machines to deploy (inluding the admin node)
+# e.g. Total: 9
+Total: 6
+
+# vSphere username
+# e.g. Username: "administrator@vsphere.local"
+Username: "administrator@vsphere.local"
+
+# vSphere password
+# e.g. Password: "Password"
+Password: "Dell:123"
+
+# vSphere Cluster
+# e.g. Cluster: "Site A"
+Cluster: "VRTX"
+
+# Template to clone the virtual machines from
+# e.g. Template: "Temaplates/ubuntu.14"
+Template: "Production/trusty-tmp"
+
+# vShere or vCenter Host name or IP address
+# e.g. Host: "esx01.vsphere.local"
+Host: "vcenter.chakra.local"
+
+# Master Username
+Master_User: "admin"
+
+# Master Password
+Master_Pass: "ADMIN"
+
+# Haddop Verion
+#Hadoop_Version: "2.6.2"
+
+# Spark Version
+Spark_Version: "1.6.1"
+
+# Maven Version
+Maven_Version: "3.3.9"
+
+# Scala Version
+Scala_Version: "2.10.5"
+
+# TensorFlow Version
+TFlow_Version: "0.9.0"
+
+# DataStax Enterprise version
+DSE_Version: "5.0.1-1"
+
+# RStudio Server version
+RStudio_Server: "0.99.903"
+
+# RStudio Shiny version
+Shiny_Version: "1.4.2.786"

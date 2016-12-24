@@ -1,0 +1,23 @@
+---
+- name: Extract spark-kernel
+  unarchive:
+    src: /home/{{ cluster_user }}/apps/spark-kernel-0.1.5-SNAPSHOT.tar.gz
+    dest: /home/{{ cluster_user }}/apps
+    creates: /home/{{ cluster_user }}/apps/spark-kernel
+    copy: no
+    owner: "{{ cluster_user }}"
+    group: "{{ cluster_user }}"
+
+- name: Create spark-kernel directory
+  file: path=/home/{{ cluster_user }}/.local/share/jupyter/kernels/scala state=directory owner={{ cluster_user }} group={{ cluster_user }}
+
+- name: Create symlink to spark-kernel
+  file:
+    src: /home/{{ cluster_user }}/apps/spark-kernel/logo-64x64.png
+    path: /home/{{ cluster_user }}/.local/share/jupyter/kernels/scala/logo-64x64.png
+    state: link
+    owner: "{{ cluster_user }}"
+    group: "{{ cluster_user }}"
+
+- name: Copy kernel.json
+  template: src=spark-kernel.json.j2 dest=/home/{{ cluster_user }}/.local/share/jupyter/kernels/scala/kernel.json owner={{ cluster_user }} group={{ cluster_user }}

@@ -1,0 +1,136 @@
+---
+- hosts: all
+  tasks:
+    - name: Create Admins group
+      group: name=admin state=present
+      become: yes
+
+    - name: Create Admin user on all nodes
+      user: name={{ cluster_user }}
+            comment="Cluster Administrator"
+            group={{ cluster_user }}
+            createhome=yes
+            home=/home/{{ cluster_user }}
+            shell=/bin/bash
+            password={{ cluster_password |password_hash('sha512') }}
+            generate_ssh_key=yes
+            ssh_key_bits=2048
+            state=present
+      become: yes
+
+    - name: Add Admin user to sudoers
+      lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
+      become: yes
+
+    - name: Ensure Admin user ssh directory exists
+      file: dest=/home/{{ cluster_user }}/.ssh owner={{ cluster_user }} group={{ cluster_user }} state=directory mode=0700
+      become: yes
+      
+    - name: Disable strict host checking for the Admin user
+      lineinfile: create=yes
+                  dest=/home/{{ cluster_user }}/.ssh/config
+                  regexp=StrictHostKeyChecking
+                  line="StrictHostKeyChecking no"
+                  owner={{ cluster_user }}
+                  group={{ cluster_user }}
+                  mode=0644
+      become: yes
+    
+    - name: Remove localhost IP address
+      lineinfile: dest=/etc/hosts regexp='127.0.1.1' state=absent
+      become: yes
+
+    - name: Build hosts file on all servers
+      lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      # Using bare variables is deprecated. Update your
+      # playbooks so that the environment value uses the full variable syntax ('{{groups['all']}}').
+      with_items: groups['all']
+      become: yes
+
+- hosts: admin
+  tasks:
+    - name: Build hosts file on local machine
+      local_action: lineinfile dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
+      # Using bare variables is deprecated. Update your
+      # playbooks so that the environment value uses the full variable syntax ('{{groups['all']}}').
+      with_items: groups['all']
+      become: yes
+
+    - name: Setup passwordless ssh
+      shell: /bin/cat /home/{{ cluster_user }}/.ssh/id_rsa.pub >> /home/{{ cluster_user }}/.ssh/authorized_keys
+      become: yes
+      become_user: "{{ cluster_user }}"
+      
+    - name: Create local directory for ssh keys
+      local_action: file path=sshkeys state=directory
+    
+    - name: Fetch ssh keys from the admin node
+      fetch: src=/home/{{ cluster_user }}/.ssh/{{ item }} dest=sshkeys/{{ item }} flat=yes
+      with_items:
+        - id_rsa
+        - id_rsa.pub
+        - authorized_keys
+      become: yes
+      become_user: "{{ cluster_user }}"
+
+- hosts: all:!admin
+  tasks:
+    - name: Distribute ssh keys
+      copy: src=sshkeys/{{ item }} dest=/home/{{ cluster_user }}/.ssh/{{ item }}
+      with_items:
+        - id_rsa
+        - id_rsa.pub
+        - authorized_keys
+      become: yes
+      become_user: "{{ cluster_user }}"
+    
+    - name: Ensure correct permissions on the ssh keys
+      file: path=/home/{{ cluster_user }}/.ssh/{{ item }} mode=0600 owner={{ cluster_user }} group={{ cluster_user }}
+      with_items:
+        - id_rsa
+        - id_rsa.pub
+        - authorized_keys
+      become: yes
+
+- name: Install and Confiugre Datastax Enterprise
+  hosts: dse
+  user: vagrant
+  become: yes
+  
+  roles:
+  - dse
+
+- name: Install OpsCenter on the admin node
+  hosts: admin
+  user: vagrant
+  become: yes
+
+  roles:
+  - opscenter
+
+- hosts: dse[0]
+  tasks:
+    - name: Get Spark Master address
+      shell: /usr/bin/dse client-tool spark master-address
+      register: spark_master
+      become_user: "{{ cluster_user }}"
+
+    - name: Set Spark Master Address fact
+      set_fact: master_address="{{ spark_master.stdout }}"
+
+- name: Configure Data Science Libraries on the admin node
+  hosts: admin
+  user: "{{ cluster_user }}"
+  become: yes
+
+  roles:
+    - admin
+  
+  vars:
+    master: "{{ hostvars[groups['dse'][0]]['master_address'] }}"
+    r_cran_mirror: http://cran.rstudio.com/
+    r_packages_repos: "{{ r_cran_mirror }}"
+    r_repository:
+      - type: deb
+        url: "{{ r_cran_mirror }}/bin/linux/ubuntu {{ ansible_distribution_release }}/"

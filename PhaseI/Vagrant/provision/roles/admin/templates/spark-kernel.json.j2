@@ -1,0 +1,21 @@
+{
+  "resources_dir": "/home/{{ cluster_user }}/.local/share/jupyter/kernels/scala/",
+  "display_name": "Scala 2.10 (Spark)",
+  "language_info": { "name": "scala" },
+  "argv": [
+    "/home/{{ cluster_user }}/apps/spark-kernel/bin/spark-kernel",
+    "--profile",
+    "{connection_file}"
+  ],
+  "codemirror_mode": "scala",
+  "env": {
+    "SPARK_OPTS": "--master={{ master }} --jars /home/{{ cluster_user }}/apps/spark-cassandra-connector-uber.jar --conf spark.cassandra.connection.host={{ hostvars[groups['dse'][0]].ansible_default_ipv4.address }} --packages=com.databricks:spark-csv_2.10:1.4.0 --driver-java-options=-Xms1024M --driver-java-options=-Xmx8192M --driver-java-options=-Dlog4j.logLevel=trace",
+    "MAX_INTERPRETER_THREADS": "16",
+    "SPARK_CONFIGURATION": "spark.cores.max=11",
+    "CAPTURE_STANDARD_OUT": "true",
+    "CAPTURE_STANDARD_ERR": "true",
+    "SEND_EMPTY_OUTPUT": "false",
+    "SPARK_HOME": "/home/{{ cluster_user }}/apps/spark",
+    "PYTHONPATH": "/home/{{ cluster_user }}/apps/spark/python:/home/{{ cluster_user }}/apps/spark/python/lib/py4j-0.9-src.zip"
+ }
+}
