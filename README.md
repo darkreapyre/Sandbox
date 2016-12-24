@@ -10,7 +10,7 @@ This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
-1. [Ansible](https://www.ansible.com)
+1. [Vagrant](https://www.vagrantup.com)/[Ansible](https://www.ansible.com)
 2. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
 3. [TerraForm](https://www.terraform.io)
 
