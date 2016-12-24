@@ -82,7 +82,7 @@ For the **Admin** node configuration  a `t2.micro` instance will be used. To fin
 <!---
 Make sure to execute the above and double check what the output is so as to add it to the comments below
 --->
-The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, **EBS-Backed** and was build during the September 2016 cycle and query the AMI ID. Take note of the latest AMI ID.
+The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, *EBS-Backed* and was build during the *September 2016* cycle and query the AMI ID. Take note of the latest AMI ID.
 
 ### Step 7:  Launch the **admin** node instance
 Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
