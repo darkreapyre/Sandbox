@@ -35,9 +35,9 @@ To start, the following components must be configured or installed:
 	- **WorkSpaces**
 	- **S3**
 
-# Getting Started
+# Configure the AWS CLI and launch the **admin** EC2 instance
 After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic environment:
-## Configure the AWS CLI and launch the **admin** EC2 instance
+
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
 - **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the **admin** instance.
