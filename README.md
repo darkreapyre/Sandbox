@@ -127,4 +127,22 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
+To shut down the **admin** node from the AWS CLI, run the following:
+
+```
+> aws ec2 stop-instances --instance-ids i-XXXXXXXX
+```
+
+To start the **admin** node from the AWS CLI, run the following:
+
+```
+> aws ec2 start-instances --instance-ids i-XXXXXXXX
+```
+
+To check if the instance is actually *stopped* before executing any of the abopve copmmands, execute the following:
+
+```
+> aws ec2 describe-instances --filter "Name=instance-state-name, Values=stopped"
+```
+
 ## Preparing for Deployment
