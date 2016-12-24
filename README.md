@@ -142,7 +142,26 @@ To start the **admin** node from the AWS CLI, run the following:
 To check if the instance is actually *stopped* before executing any of the abopve copmmands, execute the following:
 
 ```
-> aws ec2 describe-instances --filter "Name=instance-state-name, Values=stopped"
+> aws ec2 describe-instances --filter "Name=instance-state-name,Values=stopped"
 ```
 
-## Preparing for Deployment
+### Step 12: Preparing for Provisionning
+After connecting to the __admin__ node, chnage to the current working directory for the `ec2-user` and set up the [Sanbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
+
+```
+$ git clone https://github.com/darkreapyre/Sandbox.git
+$ cd Sandbox
+```
+---
+# Phase I Deployment
+
+---
+# Phase II Deployment
+
+---
+# Phase III Deployment
+
+---
+# Phase IV Deployment
+
+---
