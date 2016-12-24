@@ -1,12 +1,12 @@
 # Overview
 This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing a new Technical Account Manager (TAM) to AWS for his/her development plan. The architecture of choice is an Internet of Things (IoT) pipeline that will evolve over three phases:
-#### Phase 1: Legacy
+#### Phase I: Legacy
 This phase will involve initially porting the legacy Data Science [“Sandbox”](https://github.com/darkreapyre/Sandbox) onto AWS.
-#### Phase 2: Containers
+#### Phase II: Containers
 This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to Docker containers.
-#### Phase 3: Mesosphere
+#### Phase III: Mesosphere
 This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
-#### Phase 4: Serverless
+#### Phase IV: Serverless
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
@@ -79,16 +79,11 @@ For the **Admin** node configuration  a `t2.micro` instance will be used. To fin
 ```
 > aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
-<!---
-Make sure to execute the above and double check what the output is so as to add it to the comments below
---->
-The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, *EBS-Backed* and was build during the *September 2016* cycle and query the AMI ID. Take note of the latest AMI ID.
+The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, *EBS-Backed*, was build during the *September 2016* cycle, has *Amazon Linux* in the description to query and produce the resultant AMI ID. Take note of the latest AMI ID.
 
 ### Step 7:  Launch the **admin** node instance
 Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
-<!---
-Make sure to to run the describe-instances command to replace the X's below with the actual instance ID
---->
+
 ```
 > aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
 ```
@@ -103,7 +98,7 @@ Since the `t2.micro` instance type requires a VPC and considering that the **adm
 ```
 The output from the above command will be the `PublicIp` assigned to the *devenv* as well as the `AllocationId`. Make sure to take note of both of these as they will be required for future use. If for some reason reference to these id's are lost or forgotten, use the following command to view the information:
 ```
-> aws ec2 describe-addresses --filters "Name=Domain,Values=vpc"
+> aws ec2 describe-addresses --filters "Name=domain,Values=vpc"
 ```
 
 ### Step 9: Associating the Elastic IP with the **admin** node
@@ -111,13 +106,18 @@ To associate the Elastic IP to the running **admin** node instance, execute the 
 ```
 > aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
 ```
-<!---
-Confirm the suffix for the AMI and EIP
---->
 
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
 
-### Step 10: Connecting to the **admin** node
+### Step 10: Assign a name to the **admin** node
+Assign the **admin** node it's name by aexecuting the following command:
+```
+> aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=admin" 
+```
+
+>**Note:** *i-XXXXXXXX* should be replaced with the EC2 Instance ID created in __Step 7__.
+
+### Step 11: Connecting to the **admin** node
 Now that the **admin** node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
 - Navigate to the location of the `devenv-key.pem` file and execute the following:
