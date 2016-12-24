@@ -79,7 +79,7 @@ For the `admin` node configuration  a `t2.micro` instance will be used. To find 
 ```
 > aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
-The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, *EBS-Backed*, was build during the *September 2016* cycle, has *Amazon Linux* in the description to query and produce the resultant AMI ID. Take note of the latest AMI ID.
+The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture; *EBS-Backed*; was part of the  *2016.09.1* point release cycle; has *Amazon Linux* in the description and query to produce the resultant AMI ID. Take note of the latest AMI ID.
 
 ### Step 7:  Launch the `admin` node instance
 Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the `admin` node EC2 Instance by executing the following:
