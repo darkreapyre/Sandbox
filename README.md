@@ -10,10 +10,9 @@ This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
-1. [Vagrant](https://www.vagrantup.com)
-2. [Ansible](https://www.ansible.com)
-3. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
-4. [TerraForm](https://www.terraform.io)
+1. [Ansible](https://www.ansible.com)
+2. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
+3. [TerraForm](https://www.terraform.io)
 
 Additionally, the objective of this implementation is to leverage the Command-line (CLI) tools, scripts and an AWS WorKSpaces in order to provide an advanced user experience over and above using the AWS Console.
 
@@ -58,7 +57,7 @@ The next step is to configure the pre-requisites for launching an EC2 instance i
 ### Step 3: Allow incoming traffic over port 22 for SSH
 The next step is to authorize the newly created security group to accept **incoming** traffic via tcp port 22, the default port for SSH. Execute the following to accomplish this:
 ```
-> aws authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
+> aws ec2 authorize-security-group-ingress --group-name devenv-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
 ```
 
 >**Note:** The above command authorizes a SSH connection from anywhere. In order to more securely lock down the connection, it is recommended to use the network address from the subnet on which the AWS WorkSpaces desktop is configured.
@@ -66,34 +65,34 @@ The next step is to authorize the newly created security group to accept **incom
 ### Step 4: Confirm the security group configuration
 To get an overview of the security group configuration for the instance, execute the following:
 ```
-> aws ec2 describe-security-groups
+> aws ec2 describe-security-groups --filters "Name=group-name, Values=devenv-sg"
 ```
 
 ### Step 5: Create the key pair to connect to the EC2 instance
 Even though the security group allows a SSH connection from any network, a private key is still required too access the EC2 instance. To create the key pair and save it to a file called `devenv-key.pem`, execute the following:
 ```
-> aws create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
+> aws ec2 create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
 ```
 
 ### Step 6: Find the Amazon Image ID (AMI) for the **admin** node
 For the **Admin** node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
-> aws ec2 describe-images --owners amazonm --filters "Name-root-device-type,Values=ebs"
+> aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
 <!---
 Make sure to execute the above and double check what the output is so as to add it to the comments below
 --->
-From the output of the above command, take note of the latest AMI ID for the `t2.micro` instance.
+The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, **EBS-Backed** and was build during the September 2016 cycle and query the AMI ID. Take note of the latest AMI ID.
 
 ### Step 7:  Launch the **admin** node instance
-Using both the `t2.micro` AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
+Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
 <!---
 Make sure to to run the describe-instances command to replace the X's below with the actual instance ID
 --->
 ```
 > aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
 ```
-The output from the above command will be the output the newly created instance I'd of the **admin** node. Make sure to take note of it for future usage.
+The output from the above command will be the output the newly created instance ID of the **admin** node. Make sure to take note of it for future usage.
 
 >**Note:** *ami-XXXXXXXX* and *sg-XXXXXXXX* should be replaced with the output from **Step 6** and **Step 4** respectively.
 
