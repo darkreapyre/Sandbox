@@ -35,14 +35,14 @@ To start, the following components must be configured or installed:
 	- **WorkSpaces**
 	- **S3**
 
-# Configure the AWS CLI and launch the **admin** EC2 instance
+# Configure the AWS CLI and launch the `admin` EC2 instance
 After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic environment:
 
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
-- **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the **admin** instance.
-- **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the **admin** instance.
-- **Default region name:** This is the AWS region where the **admin** instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
+- **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the `admin` instance.
+- **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the `admin` instance.
+- **Default region name:** This is the AWS region where the `admin` instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
 - **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI.
 
 >**Note:** To configure multiple profiles, named profiles can be configured with the `--profile <profile name>` option. Additionally, to change any of the above options, simply run `aws configure` again.
@@ -74,25 +74,25 @@ Even though the security group allows a SSH connection from any network, a priva
 > aws ec2 create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
 ```
 
-### Step 6: Find the Amazon Image ID (AMI) for the **admin** node
-For the **Admin** node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
+### Step 6: Find the Amazon Image ID (AMI) for the `admin` node
+For the `admin` node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
 > aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
 The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture, *EBS-Backed*, was build during the *September 2016* cycle, has *Amazon Linux* in the description to query and produce the resultant AMI ID. Take note of the latest AMI ID.
 
-### Step 7:  Launch the **admin** node instance
-Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the **admin** node EC2 Instance by executing the following:
+### Step 7:  Launch the `admin` node instance
+Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the `admin` node EC2 Instance by executing the following:
 
 ```
 > aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
 ```
-The output from the above command will be the output the newly created instance ID of the **admin** node. Make sure to take note of it for future usage.
+The output from the above command will be the output the newly created instance ID of the `admin` node. Make sure to take note of it for future usage.
 
 >**Note:** *ami-XXXXXXXX* and *sg-XXXXXXXX* should be replaced with the output from **Step 6** and **Step 4** respectively.
 
 ### Step 8: Allocate an Elastic IP Address for EC2-VPC
-Since the `t2.micro` instance type requires a VPC and considering that the **admin** node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
+Since the `t2.micro` instance type requires a VPC and considering that the `admin` node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
 ```
 > aws ec2 allocate-address --domain vpc
 ```
@@ -101,24 +101,24 @@ The output from the above command will be the `PublicIp` assigned to the *devenv
 > aws ec2 describe-addresses --filters "Name=domain,Values=vpc"
 ```
 
-### Step 9: Associating the Elastic IP with the **admin** node
-To associate the Elastic IP to the running **admin** node instance, execute the following:
+### Step 9: Associating the Elastic IP with the `admin` node
+To associate the Elastic IP to the running `admin` node instance, execute the following:
 ```
 > aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
 ```
 
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
 
-### Step 10: Assign a name to the **admin** node
-Assign the **admin** node it's name by aexecuting the following command:
+### Step 10: Assign a name to the `admin` node
+Assign the `admin` node it's name by aexecuting the following command:
 ```
 > aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=admin" 
 ```
 
 >**Note:** *i-XXXXXXXX* should be replaced with the EC2 Instance ID created in __Step 7__.
 
-### Step 11: Connecting to the **admin** node
-Now that the **admin** node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
+### Step 11: Connecting to the `admin` node
+Now that the `admin` node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
 - Navigate to the location of the `devenv-key.pem` file and execute the following:
 ```
@@ -127,13 +127,13 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-To shut down the **admin** node from the AWS CLI, run the following:
+To shut down the `admin` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 stop-instances --instance-ids i-XXXXXXXX
 ```
 
-To start the **admin** node from the AWS CLI, run the following:
+To start the `admin` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 start-instances --instance-ids i-XXXXXXXX
