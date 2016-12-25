@@ -35,7 +35,7 @@ groups = {
 
 Vagrant.configure("2") do |config|
   config.vm.box = 'vsphere'
-  config.vm.box_url = './example_box/dummy.box'
+  config.vm.box_url = './aws_box/dummy.box'
   config.vm.boot_timeout = 600
   (1..Total).each do |i|
     if i == 1
