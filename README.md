@@ -1,12 +1,12 @@
 # Overview
-This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing a new Technical Account Manager (TAM) to AWS for his/her development plan. The architecture of choice is an Internet of Things (IoT) pipeline that will evolve over three phases:
-#### Phase I: Legacy
+This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing a new Technical Account Manager (TAM) to AWS for his/her development plan. The architecture of choice is an Internet of Things (IoT) pipeline that can be implemented using four differnt options:
+#### Traditional
 This phase will involve initially porting the legacy Data Science [“Sandbox”](https://github.com/darkreapyre/Sandbox) onto AWS.
-#### Phase II: Containers
+#### Containerized
 This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to Docker containers.
-#### Phase III: Mesosphere
+#### Mesosphere
 This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
-#### Phase IV: Serverless
+#### Serverless
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
@@ -152,16 +152,19 @@ After connecting to the __admin__ node, chnage to the current working directory 
 $ git clone https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
 ```
----
-# Phase I Deployment
+
+
 
 ---
-# Phase II Deployment
+# Traditional Iaas Architecture
 
 ---
-# Phase III Deployment
+# Containerized Architecture
 
 ---
-# Phase IV Deployment
+# Mesosphere DC/OS
+
+---
+# Serverlerss Architecture
 
 ---
