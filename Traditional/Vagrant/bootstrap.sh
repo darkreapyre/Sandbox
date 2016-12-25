@@ -16,7 +16,7 @@ vagrant plugin install vagrant-aws
 # Install Ansible
 echo "Installing Ansible"
 sudo yum -y install ansible
-sudo easy_install pip
+#sudo easy_install pip
 
 # Install Python libraries for vSphere
 #echo "Installing vSpehere API"
