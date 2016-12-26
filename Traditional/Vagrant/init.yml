@@ -1,7 +1,7 @@
 # Initialization Template
 # Save as init.yml when completed
 # Total number of Virtual Machines to deploy (inluding the admin node)
-# e.g. Total: 9
+# Suggested for the full architecture -> Total: 9
 Total: 6
 
 # Master Username
@@ -23,13 +23,13 @@ Maven_Version: "3.3.9"
 Scala_Version: "2.10.5"
 
 # TensorFlow Version
-TFlow_Version: "0.9.0"
+TFlow_Version: "0.11.0"
 
 # DataStax Enterprise version
 DSE_Version: "5.0.1-1"
 
 # RStudio Server version
-RStudio_Server: "0.99.903"
+rstudio_server: "1.0.44"
 
 # RStudio Shiny version
-Shiny_Version: "1.4.2.786"
+shiny_version: "1.5.1.834"
