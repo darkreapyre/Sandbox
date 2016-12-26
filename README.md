@@ -36,13 +36,13 @@ To start, the following components must be configured or installed:
 	- **S3**
 
 # Configure the AWS CLI and launch the `edge` EC2 instance
-After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `edge` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later storage be used as the VPN edge point into a VPC, a ssh bastion host allowing for local code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A]. Testing a footnote.[^1
+After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `edge` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A]. Testing a footnote.[^1
 
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
 - **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the `admin` instance.
 - **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the `admin` instance.
-- **Default region name:** This is the AWS region where the `admin` instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
+- **Default region name:** This is the AWS region where the `edge` instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
 - **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI.
 
 >**Note:** To configure multiple profiles, named profiles can be configured with the `--profile <profile name>` option. Additionally, to change any of the above options, simply run `aws configure` again.
@@ -75,7 +75,7 @@ Even though the security group allows a SSH connection from any network, a priva
 ```
 
 ### Step 6: Find the Amazon Image ID (AMI) for the `admin` node
-For the `admin` node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
+For the `edge` node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
 > aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
@@ -102,7 +102,7 @@ The output from the above command will be the `PublicIp` assigned to the *devenv
 ```
 
 ### Step 9: Associating the Elastic IP with the `admin` node
-To associate the Elastic IP to the running `admin` node instance, execute the following:
+To associate the Elastic IP to the running `edge` node instance, execute the following:
 ```
 > aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
 ```
@@ -110,15 +110,15 @@ To associate the Elastic IP to the running `admin` node instance, execute the fo
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
 
 ### Step 10: Assign a name to the `admin` node
-Assign the `admin` node it's name by aexecuting the following command:
+Assign the `edge` node it's name by aexecuting the following command:
 ```
-> aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=admin" 
+> aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=edge" 
 ```
 
 >**Note:** *i-XXXXXXXX* should be replaced with the EC2 Instance ID created in __Step 7__.
 
-### Step 11: Connecting to the `admin` node
-Now that the `admin` node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
+### Step 11: Connecting to the `edge` node
+Now that the `edge` node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
 - Navigate to the location of the `devenv-key.pem` file and execute the following:
 ```
@@ -127,13 +127,13 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-To shut down the `admin` node from the AWS CLI, run the following:
+To shut down the `edge` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 stop-instances --instance-ids i-XXXXXXXX
 ```
 
-To start the `admin` node from the AWS CLI, run the following:
+To start the `edge` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 start-instances --instance-ids i-XXXXXXXX
@@ -146,7 +146,7 @@ To check if the instance is actually *stopped* before executing any of the abopv
 ```
 
 ### Step 12: Preparing for Provisionning
-After connecting to the `admin` node, chnage to the current working directory for the `ec2-user` and set up the [Sanbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
+After connecting to the `edge` node, chnage to the current working directory for the `ec2-user` and set up the [Sanbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
 
 ```
 # Change to working directory of the .pem file
@@ -163,9 +163,9 @@ $ git clone https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
 $ mv /tmp/devenv-key.pem .
 ```
->__Note:__ The `admin` node is used to create and test deployment code as well as run the *Jupyter* and *Zeppelin* IDE. If there is a preference to testing code locally, the `admin` node can be used as [proxy or jump host](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts#Passing_through_a_gateway_using_netcat_mode).
+>__Note:__ The `edge` node is used to create and test deployment code as well as run the *Jupyter* and *Zeppelin* IDE. If there is a preference to testing code locally, the `edge` node can be used as [proxy or jump host](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts#Passing_through_a_gateway_using_netcat_mode).
 
-Now that the `admin` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
+Now that the `edge` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
 
 ---
 # Traditional Iaas Architecture
