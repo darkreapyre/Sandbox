@@ -4,26 +4,6 @@
 # e.g. Total: 9
 Total: 6
 
-# vSphere username
-# e.g. Username: "administrator@vsphere.local"
-Username: "administrator@vsphere.local"
-
-# vSphere password
-# e.g. Password: "Password"
-Password: "Dell:123"
-
-# vSphere Cluster
-# e.g. Cluster: "Site A"
-Cluster: "VRTX"
-
-# Template to clone the virtual machines from
-# e.g. Template: "Temaplates/ubuntu.14"
-Template: "Production/trusty-tmp"
-
-# vShere or vCenter Host name or IP address
-# e.g. Host: "esx01.vsphere.local"
-Host: "vcenter.chakra.local"
-
 # Master Username
 Master_User: "admin"
 
