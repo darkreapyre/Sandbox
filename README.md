@@ -161,6 +161,7 @@ $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 # Download the Architecture and Deployment code
 $ git clone https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
+$ mv /tmp/devenv-key.pem .
 ```
 >__Note:__ The `admin` node is used to create and test deployment code as well as run the *Jupyter* and *Zeppelin* IDE. If there is a preference to testing code locally, the `admin` node can be used as [proxy or jump host](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts#Passing_through_a_gateway_using_netcat_mode).
 
