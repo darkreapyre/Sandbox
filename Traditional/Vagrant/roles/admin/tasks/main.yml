@@ -65,5 +65,20 @@
 - include: rstudio-server.yml
 - include: rstudio-shiny.yml
 
-# TO-DO
-#- include: zeppelin.yml
+# Next Steps:
+# Manually configure sklesrn version (0.17 or 0.18)
+
+# Mnaually configure `hide-code` for jupyter (make sure jupyter isn't running)
+#sudo pip3 install pdfkit
+#sudo pip install hide_code
+#sudo pip3 install hide_code
+#sudo rm -rf /usr/local/lib/python2.7/dist-packages/hide_code*
+#sudo rm -rf /usr/local/lib/python3.4/dist-pacgakes/fide_code*
+#sudo pip install hide_code
+#sudo pip3 install hide_code
+
+# Manually configure X if needed (as admin_user)
+# sudo apt-get install xfce4
+# sudo startxfce4&
+
+# Install zeppelin
