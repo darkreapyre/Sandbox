@@ -14,7 +14,7 @@ Master_Pass: "ADMIN"
 AWS_Keyname: "devenv-key"
 
 # AWS Region
-AWS_Region: "us-west-1"
+AWS_Region: "us-west-2"
 
 # AWS AMI: Ubuntu Server 14.04 LTS
 AWS_AMI: "ami-30e65350"
