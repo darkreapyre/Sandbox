@@ -163,8 +163,6 @@ $ git clone https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
 $ mv /tmp/devenv-key.pem .
 ```
->__Note:__ The `edge` node is used to create and test deployment code as well as run the *Jupyter* and *Zeppelin* IDE. If there is a preference to testing code locally, the `edge` node can be used as [proxy or jump host](https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts#Passing_through_a_gateway_using_netcat_mode).
-
 Now that the `edge` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
 
 ---
@@ -173,18 +171,18 @@ Now that the `edge` node is ready, it can be leveraged to deploy any of the abov
 ```
 export AWS_KEY='your-key'
 export AWS_SECRET='your-secret'
-export AWS_KEYNAME='your-keyname'
-export AWS_KEYPATH='your-keypath'
+export AWS_KEYNAME='devenv-key'
+export AWS_KEYPATH='~/Sandbox/devenv-key.pem'
 ```
 
 ---
-# Containerized Architecture
+# Containerized GPU Architecture
 
 ---
-# Mesosphere DC/OS
+# Mesosphere DC/OS Architecture
 
 ---
-# Serverlerss Architecture
+# NoOps Architecture
 
 ---
 
