@@ -169,10 +169,8 @@ Now that the `edge` node is ready, it can be leveraged to deploy any of the abov
 # Traditional Iaas Architecture
 
 ```
-export AWS_KEY='your-key'
-export AWS_SECRET='your-secret'
-export AWS_KEYNAME='devenv-key'
-export AWS_KEYPATH='~/Sandbox/devenv-key.pem'
+export AWS_KEY=########
+export AWS_SECRET=########
 ```
 
 ---
@@ -187,5 +185,3 @@ export AWS_KEYPATH='~/Sandbox/devenv-key.pem'
 ---
 
 # Appendix A: Considerations for Securing the Environment
-
-[1]: Footnorte reference 

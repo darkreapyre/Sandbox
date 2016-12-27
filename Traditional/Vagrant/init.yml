@@ -10,6 +10,24 @@ Master_User: "admin"
 # Master Password
 Master_Pass: "ADMIN"
 
+# AWS key-pair name
+AWS_Keyname: "devenv-key"
+
+# AWS Region
+AWS_Region: "us-west-1"
+
+# AWS AMI: Ubuntu Server 14.04 LTS
+AWS_AMI: "ami-30e65350"
+
+# AWS EC2 Instance Type: m4.2xlarge (8vCPU, 32GB)
+AWS_Instance_Type: "m4.2xlarge"
+
+# AWS Security Group ID: To be manually updated as a list if not default
+AWS_Security_Groups: ['default']
+
+# AWS Private Key Path
+AWS_Private_Key_Path: "~/Sandbox/devenv-key.pem"
+
 # Haddop Verion
 #Hadoop_Version: "2.6.2"
 
