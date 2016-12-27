@@ -36,7 +36,7 @@ To start, the following components must be configured or installed:
 	- **S3**
 
 # Configure the AWS CLI and launch the `edge` EC2 instance
-After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `edge` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A][]. Testing a footnote.[1]
+After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `edge` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A: Considerations for Securing the Environment][].
 
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
@@ -186,6 +186,6 @@ export AWS_KEYPATH='~/Sandbox/devenv-key.pem'
 
 ---
 
-# [Appendix A]: Considerations for Securing the Environment
+# Appendix A: Considerations for Securing the Environment
 
 [1]: Footnorte reference 
