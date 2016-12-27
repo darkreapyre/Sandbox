@@ -168,10 +168,13 @@ Now that the `edge` node is ready, it can be leveraged to deploy any of the abov
 ---
 # Traditional Iaas Architecture
 
+Before initializing the environment, make sure to run the following:
 ```
 export AWS_KEY=########
 export AWS_SECRET=########
 ```
+
+>**Note:** Replace `#######` with the *AWS Access key ID* and *Secret access key* respctivley.
 
 ---
 # Containerized GPU Architecture
