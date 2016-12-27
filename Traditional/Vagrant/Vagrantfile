@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
         }
         # Override Vagrant username, key defaults
         override.ssh.username = "ubuntu"
-        override.ssh.private_key_path = ENV['AWS_KEY_PATH']
+        override.ssh.private_key_path = @cmd['AWS_Private_Key_Path']
         # override.ssh.forward_agent = ""
         
       end  
