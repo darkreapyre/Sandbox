@@ -7,25 +7,7 @@ require 'yaml'
 @cmd = YAML.load_file('init.yml')
 puts @cmd.inspect
 
-# ------------------------- GLOBAL CONFIG PARAMS ----------------------------
-Total = @cmd['Total']
-Username = @cmd['Username']
-Password = @cmd['Password']
-Pool = @cmd['Pool']
-Cluster = @cmd['Cluster']
-Template = @cmd['Template']
-Host = @cmd['Host']
-Spark_Version = @cmd['Spark_Version']
-Master_User = @cmd['Master_User']
-Master_Password = @cmd['Master_Pass']
-Maven_Version = @cmd['Maven_Version']
-DSE_Version = @cmd['DSE_Version']
-Scala_Version = @cmd['Scala_Version']
-TFlow_Version = @cmd['TFlow_Version']
-RStudio_Server = @cmd['RStudio_Server']
-Shiny_Version = @cmd['Shiny_Version']
-# -------------------------- END GLOBAL CONFIG PARAMS -----------------------
-
+# Create the Ansible groups
 groups = {
   "admin" => [],
   "dse" => [],
@@ -34,10 +16,10 @@ groups = {
 }
 
 Vagrant.configure("2") do |config|
-  config.vm.box = 'vsphere'
-  config.vm.box_url = './aws_box/dummy.box'
+  config.vm.box = "dummy"
+  config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
   config.vm.boot_timeout = 600
-  (1..Total).each do |i|
+  (1..@cmd['Total']).each do |i|
     if i == 1
       name = "admin"
       groups["admin"] << name
@@ -50,35 +32,50 @@ Vagrant.configure("2") do |config|
     end
     config.vm.define "#{name}" do | config |
       config.vm.hostname = name
+      # Apply Ansible configuration to the last maschine
       if i == Total
         config.vm.provision :ansible do |ansible|
           ansible.playbook = "site.yml"
           ansible.groups = groups
           ansible.extra_vars = {
-            "dse_version" => DSE_Version,
-            "rstudio_server" => RStudio_Server,
-            "shiny_version" => Shiny_Version,
-            "spark_version" => Spark_Version,
-            "maven_version" => Maven_Version,
-            "tflow_version" => TFlow_Version,
-            "scala_version" => Scala_Version,            
-            "cluster_user" => Master_User,
-            "cluster_password" => Master_Password
+            "dse_version" => @cmd['DSE_Version'],
+            "rstudio_server" => @cmd['RStudio_Server'],
+            "shiny_version" => @cmd['Shiny_Version'],
+            "spark_version" => @cmd['Spark_Version'],
+            "maven_version" => @cmd['Maven_Version'],
+            "tflow_version" => @cmd['TFlow_Version'],
+            "scala_version" => @cmd['Scala_Version'],            
+            "cluster_user" => @cmd['Master_User'],
+            "cluster_password" => @cmd['Master_Pass']
           }
           ansible.limit = "all"
           ansible.verbose = "v"
           ansible.raw_ssh_args = ['-o ControlPersist=30m']
         end
       end
-      config.vm.provider :vsphere do |vsphere|
-        vsphere.name = name
-        vsphere.template_name = Template
-        vsphere.linked_clone = false
-        vsphere.host = Host
-        vsphere.insecure = true
-        vsphere.compute_resource_name = Cluster
-        vsphere.user = Username
-        vsphere.password = Password
+      
+      # Specify AWS provider configuration
+      config.vm.provider :aws do |aws, override|
+        # Read the AWS authentication environmental variables
+        aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+        aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+        # Specify the Key-pair
+        aws.keypair_name = "devenv-key"
+        # Specify the aws region
+        aws.region = "us-west-1"
+        # Specify the AMI type: ubuntu 14.04
+        aws.ami = ""
+        # Specify the EC2 Instance type
+        aws.instance_type = ""
+        # Set the Name tag of the EC2 Instance
+        aws.tags = {
+          "Name" => name,
+          "Description" => "DataStax Enterprise"
+        }
+        # Override Vagrant username, key defaults
+        override.ssh.username = "ubuntu"
+        override.ssh.private_key_patth = ENV['AWS_KEY_PATH']
+        
       end  
     end
   end

@@ -170,6 +170,13 @@ Now that the `edge` node is ready, it can be leveraged to deploy any of the abov
 ---
 # Traditional Iaas Architecture
 
+```
+export AWS_KEY='your-key'
+export AWS_SECRET='your-secret'
+export AWS_KEYNAME='your-keyname'
+export AWS_KEYPATH='your-keypath'
+```
+
 ---
 # Containerized Architecture
 
