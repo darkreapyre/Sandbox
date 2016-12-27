@@ -2,10 +2,10 @@
 - hosts: all
   tasks:
     - name: Create Admins group
-      group: name=admin state=present
+      group: name={{ cluster_user }} state=present
       become: yes
 
-    - name: Create Admin user on all nodes
+    - name: Create admin user on all nodes
       user: name={{ cluster_user }}
             comment="Cluster Administrator"
             group={{ cluster_user }}
@@ -18,11 +18,11 @@
             state=present
       become: yes
 
-    - name: Add Admin user to sudoers
+    - name: Add admin user to sudoers
       lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ cluster_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
       become: yes
 
-    - name: Ensure Admin user ssh directory exists
+    - name: Ensure admin user ssh directory exists
       file: dest=/home/{{ cluster_user }}/.ssh owner={{ cluster_user }} group={{ cluster_user }} state=directory mode=0700
       become: yes
       
@@ -50,14 +50,14 @@
 
 - hosts: admin
   tasks:
-    - name: Build hosts file on local machine
+    - name: Build hosts file on edge machine
       local_action: lineinfile dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
       # Using bare variables is deprecated. Update your
       # playbooks so that the environment value uses the full variable syntax ('{{groups['all']}}').
       with_items: groups['all']
       become: yes
 
-    - name: Setup passwordless ssh
+    - name: Setup passwordless ssh on all servers
       shell: /bin/cat /home/{{ cluster_user }}/.ssh/id_rsa.pub >> /home/{{ cluster_user }}/.ssh/authorized_keys
       become: yes
       become_user: "{{ cluster_user }}"
@@ -95,7 +95,7 @@
 
 - name: Install and Confiugre Datastax Enterprise
   hosts: dse
-  user: vagrant
+#  user: vagrant #<-- removing user to verify if ssh.override sets this to `ubuntu`
   become: yes
   
   roles:
@@ -103,7 +103,7 @@
 
 - name: Install OpsCenter on the admin node
   hosts: admin
-  user: vagrant
+#  user: vagrant #<-- removing user to verify if ssh.override sets this to `ubuntu`
   become: yes
 
   roles:
