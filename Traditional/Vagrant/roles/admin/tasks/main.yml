@@ -1,4 +1,6 @@
 ---
+- include: base.yml
+
 - name: Create the Apps directory
   file: path=/home/{{ cluster_user }}/apps state=directory owner={{ cluster_user }} group={{ cluster_user }} mode=0777 recurse=yes
 
@@ -9,7 +11,7 @@
   copy: src=spark-cassandra-connector-uber.jar dest=/home/{{ cluster_user }}/apps mode=0664 owner={{ cluster_user }} group={{ cluster_user }}
 
 - name: Download Spark 1.6.1 to Apps directory
-  get_url: url=http://apache.claz.org/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
+  get_url: url=http://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ cluster_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
 
 - name: Clone the latest version of Zeppelin
   git: repo=https://github.com/apache/incubator-zeppelin.git dest=/home/{{ cluster_user }}/apps/incubator-zeppelin
@@ -50,7 +52,8 @@
     - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ cluster_user }}/scripts/start-pyspark-notebook.sh"}
     - {src: "sparkR-start.R.j2", dest: "/home/{{ cluster_user }}/scripts/sparkR-start.R"}
     - {src: "zeppelin-env.sh.j2", dest: "/home/{{ cluster_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
-  
+
+#- include: java.yml  
 - include: python.yml
 - include: scala.yml
 - include: ruby.yml
