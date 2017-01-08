@@ -98,7 +98,8 @@
   
   vars:
     master: "local[*]"
-    r_cran_mirror: http://cran.rstudio.com/
+#    r_cran_mirror: http://cran.rstudio.com/
+    r_cran_mirror: https://cloud.r-project.org
     r_packages_repos: "{{ r_cran_mirror }}"
     r_repository:
       - type: deb
