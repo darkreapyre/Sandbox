@@ -22,9 +22,12 @@
     - libtiff5-dev
     - libjpeg8-dev
     - zlib1g-dev
-    - texlive
-    - texlive-latex-extra
+#    - texlive
+    - texlive-full
+#    - texlive-latex-extra
     - pandoc
+#    - texlive-xetex
+#    - texlive-generic-extra 
     - libreadline-dev
     - python-psycopg2
     - python-mpltoolkits.basemap
