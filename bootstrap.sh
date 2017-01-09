@@ -14,7 +14,7 @@ echo "Installing Vagrant"
 wget https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
 sudo dpkg -i vagrant_1.8.7_x86_64.deb
 #vagrant plugin install vagrant-address
-sudo vagrant plugin install vagrant-aws
+vagrant plugin install vagrant-aws
 
 # Install Ansible
 echo "Installing Ansible"
