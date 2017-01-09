@@ -1,0 +1,84 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'yaml'
+
+# Load the initialization file `init.yml`
+@cmd = YAML.load_file('init.yml')
+puts @cmd.inspect
+
+# ------------------------- GLOBAL CONFIG PARAMS ----------------------------
+#Total = @cmd['Total']
+#Username = @cmd['Username']
+#Password = @cmd['Password']
+#Pool = @cmd['Pool']
+#Cluster = @cmd['Cluster']
+#Template = @cmd['Template']
+#Host = @cmd['Host']
+#Spark_Version = @cmd['spark_version']
+#Master_User = @cmd['admin_user']
+#Master_Password = @cmd['admin_pass']
+#Maven_Version = @cmd['maven_version']
+#DSE_Version = @cmd['dse_version']
+#Scala_Version = @cmd['scala_version']
+#TFlow_Version = @cmd['tflow_version']
+#RStudio_Server = @cmd['rstudio_server']
+#Shiny_Version = @cmd['shiny_version']
+# -------------------------- END GLOBAL CONFIG PARAMS -----------------------
+
+groups = {
+  "admin" => [],
+  "workers" => [],
+  "all_groups:children" => ["admin", "workers"]
+}
+
+Vagrant.configure("2") do |config|
+  config.vm.box = 'vsphere'
+  config.vm.box_url = './example_box/dummy.box'
+  config.vm.boot_timeout = 600
+  (1..@cmd['Total']).each do |i|
+    if i == 1
+      name = "admin"
+      groups["admin"] << name
+    elsif i >= 7
+      name = "flink-#{i - 7}"
+      groups["flink"] << name
+    else
+      name = "dse-#{i - 1}"
+      groups["dse"] << name
+    end
+    config.vm.define "#{name}" do | config |
+      config.vm.hostname = name
+      if i == Total
+        config.vm.provision :ansible do |ansible|
+          ansible.playbook = "site.yml"
+          ansible.groups = groups
+          ansible.extra_vars = {
+            "dse_version" => @cmd['dse_version'],
+            "rstudio_server" => @cmd['rstudio_server'],
+            "shiny_version" => @cmd['shiny_version'],
+            "spark_version" => @cmd['spark_version']
+            "maven_version" => @cmd['maven_version'],
+            "tflow_version" => @cmd['tflow_version'],
+            "scala_version" => @cmd['scala_version'],            
+            "cluster_user" => @cmd['admin_user'],
+            "cluster_password" => @cmd['admin_pass']
+          }
+          ansible.limit = "all"
+          ansible.verbose = "v"
+          ansible.raw_ssh_args = ['-o ControlPersist=30m']
+        end
+      end
+      config.vm.provider :vsphere do |vsphere|
+        vsphere.name = name
+        vsphere.template_name = Template
+        vsphere.linked_clone = false
+        vsphere.host = Host
+        vsphere.insecure = true
+        vsphere.compute_resource_name = Cluster
+        vsphere.user = Username
+        vsphere.password = Password
+      end  
+    end
+  end
+end

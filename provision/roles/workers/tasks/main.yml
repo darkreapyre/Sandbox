@@ -1,0 +1,113 @@
+---
+- name: Updating apt repository
+  apt: update_cache=yes
+  become: yes
+
+- name: Install build dependecies for scipy
+  apt: pkg=python-scipy state=build-dep
+  become: yes
+
+- name: Install common packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-pip
+    - python-scipy
+  become: yes
+
+- name: Install common Python libraries
+  pip: name={{ item }} state=present
+  with_items:
+    - scikit-learn
+    - Theano
+    - spark-sklearn
+    - keras
+  become: yes
+
+- name: Install TensorFlow
+  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
+  become: yes
+
+- set_fact: cassandra_seeds="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+  with_items: "{{ groups['dse'] }}"
+  register: result
+
+- set_fact: cassandra_seeds="{{ result.results | map(attribute='ansible_facts.cassandra_seeds') | list | join(",") }}"
+
+- name: Update Hosts
+  apt: update_cache=yes
+
+- name: Install Common Packages
+  apt: pkg={{ item }} state=installed update-cache=yes
+  with_items:
+  - curl
+  - libssl0.9.8
+  - libjna-java
+  - sysstat
+  - python-software-properties
+
+- name: Add Oracle Java Repository
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Add Datastax Repository
+  shell: echo "deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main" | sudo tee -a /etc/apt/sources.list.d/datastax.sources.list
+
+- name: Add Datastax Repository Key
+  apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
+
+- name: Update Host
+  apt: update_cache=yes
+
+- name: Accept Java License
+  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+
+- name: Install Oracle Java 8
+  apt: pkg={{item}} state=latest
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+
+- name: Install Datastax Enterprise
+  apt: pkg=dse-full={{ dse_version }} state=installed update-cache=yes
+
+- name: Create jna symlink
+  # Consider using file module with state=link rather than running ln
+  shell: ln -s /usr/share/java/jna.jar /usr/share/dse/cassandra/lib || true
+
+- name: Configure Datastax Enterprise
+  template: src=templates/cassandra.yaml dest=/etc/dse/cassandra/cassandra.yaml
+
+- name: Configure Analytics
+  lineinfile:
+    dest: /etc/default/dse
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^SPARK_ENABLED=0', line: 'SPARK_ENABLED=1' }
+    - { regexp: '^SOLR_ENABLED=0', line: 'SOLR_ENABLED=1' }
+    - { regexp: '^GRAPH_ENABLED=0', line: 'GRAPH_ENABLED=1' }
+
+- name: Start Datastax Enterprise
+  service: name=dse enabled=yes state=started
+
+# These files are only needed when connecting to AWS workers, BUT some might be local
+# NOTE: LOCAL_ACTION
+- name: Copy scripts and variables to admin node
+  template: src={{ item.src }} dest={{ item.dest }} owner={{ admin_user }} group={{ admin_user }} mode=0777 force=no
+  with_items:
+    - {src: "start-pyspark-notebook.sh.j2", dest: "/home/{{ admin_user }}/scripts/start-pyspark-notebook-AWS.sh"}
+    - {src: "sparkR-start.R.j2", dest: "/home/{{ admin_user }}/scripts/sparkR-start-AWS.R"}
+    - {src: "zeppelin-env.sh.j2", dest: "/home/{{ admin_user}}/apps/incubator-zeppelin/conf/zeppelin-env.sh"}
+
+- name: Create spark-kernel for AWS directory
+  file: path=/home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS state=directory owner={{ admin_user }} group={{ admin_user }}
+
+- name: Create symlink to spark-kernel for AWS
+  file:
+    src: /home/{{ admin_user }}/apps/spark-kernel/logo-64x64.png
+    path: /home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS/logo-64x64.png
+    state: link
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
+
+- name: Copy kernel.json for AWS
+  template: src=spark-kernel.json.j2 dest=/home/{{ admin_user }}/.local/share/jupyter/kernels/scala-AWS/kernel.json owner={{ admin_user }} group={{ admin_user }} force=yes
