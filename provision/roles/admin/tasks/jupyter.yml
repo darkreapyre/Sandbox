@@ -1,0 +1,54 @@
+---
+- name: Create notebooks directory
+  file:
+    state: directory
+    dest: /home/{{ admin_user }}/notebooks
+    owner: "{{ admin_user }}"
+    group: "{{ admin_user }}"
+
+- name: Install Jupyter for Python3
+  pip: name=jupyter executable=pip3
+
+- name: Install Jupyter for Python2
+  pip: name=jupyter
+
+- name: Install Python2 kernel
+  command: python2 -m ipykernel install
+
+- name: Generate notebook config
+  command: jupyter notebook --generate-config
+  become_user: "{{ admin_user }}"
+
+- name: Create Jupyter default config
+  template:
+    src=jupyter_notebook_config.py.j2
+    dest=/home/{{ admin_user }}/.jupyter/jupyter_notebook_config.py
+    owner={{ admin_user }}
+    group={{ admin_user }}
+
+- name: Unset the Jupyter runtime id in .bashrc
+  lineinfile:
+    dest: '/home/{{ admin_user }}/.bashrc'
+    line: 'unset XDG_RUNTIME_DIR'
+    regexp: '^(# *)?unset XDG_RUNTIME'
+  become_user: "{{ admin_user }}"
+
+- name: Install Jupyter nbextensions for Python 2
+  shell: "pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  become: yes
+
+- name: Install Jupyter nbextensions for Python 3
+  shell: "pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+  become: yes
+
+- name: Enable nbextensions
+  shell: "jupyter contrib nbextension install --user"
+  become_user: "{{ admin_user }}"
+
+- name: Enable nbextensions_contributor
+  shell: "jupyter nbextensions_configurator enable --user"
+  become_user: "{{ admin_user }}"
+
+# The following need to be researched as the destination directory doesn't exist in jupyter.
+#- name: Disable notebook warnings
+#  template: src=disable-warning.py.j2 dest=/home/{{ admin_user }}/.ipython/profile_default/startup/disable-warning.py

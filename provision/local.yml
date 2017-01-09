@@ -1,0 +1,106 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Create Admins group
+      group: name=admin state=present
+      become: yes
+    
+    - name: Create Admin user on all nodes
+      user: name={{ admin_user }}
+            comment="Cluster Administrator"
+            group={{ admin_user }}
+            createhome=yes
+            home=/home/{{ admin_user }}
+            shell=/bin/bash
+            password={{ admin_pass |password_hash('sha512') }}
+            generate_ssh_key=yes
+            ssh_key_bits=2048
+            state=present
+      become: yes
+
+    - name: Add Admin user to sudoers
+      lineinfile: "dest=/etc/sudoers insertafter=EOF line='{{ admin_user }} ALL=(ALL) NOPASSWD: ALL' regexp='{{ admin_user }} ALL=(ALL) NOPASSWD: ALL' state=present"
+      become: yes
+
+    - name: Ensure Admin user ssh directory exists
+      file: dest=/home/{{ admin_user }}/.ssh owner={{ admin_user }} group={{ admin_user }} state=directory mode=0700
+      become: yes
+      
+    - name: Disable strict host checking for the Admin user
+      lineinfile: create=yes
+                  dest=/home/{{ admin_user }}/.ssh/config
+                  regexp=StrictHostKeyChecking
+                  line="StrictHostKeyChecking no"
+                  owner={{ admin_user }}
+                  group={{ admin_user }}
+                  mode=0644
+      become: yes
+    
+    - name: Remove localhost IP address
+      lineinfile: dest=/etc/hosts regexp='127.0.1.1' state=absent
+      become: yes
+
+# Verify if this is necessary for Admin node only deployment
+#    - name: Build hosts file on local machine
+#      local_action: lineinfile dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
+      # Using bare variables is deprecated. Update your
+      # playbooks so that the environment value uses the full variable syntax ('{{groups['all']}}').
+#      with_items: groups['all']
+#      become: yes
+
+    - name: Setup passwordless ssh
+      shell: /bin/cat /home/{{ admin_user }}/.ssh/id_rsa.pub >> /home/{{ admin_user }}/.ssh/authorized_keys
+      become: yes
+      become_user: "{{ admin_user }}"
+      
+# Verify if this is necessary for Admin node only deployment
+#    - name: Create local directory for ssh keys
+#      local_action: file path=sshkeys state=directory
+#    
+#    - name: Fetch ssh keys from the admin node
+#      fetch: src=/home/{{ admin_user }}/.ssh/{{ item }} dest=sshkeys/{{ item }} flat=yes
+#      with_items:
+#        - id_rsa
+#        - id_rsa.pub
+#        - authorized_keys
+#      become: yes
+#      become_user: "{{ admin_user }}"
+
+# Verify if this is necessary for Admin node only deployment
+#- hosts: all:!admin
+#  tasks:
+#    - name: Distribute ssh keys
+#      copy: src=sshkeys/{{ item }} dest=/home/{{ admin_user }}/.ssh/{{ item }}
+#      with_items:
+#        - id_rsa
+#        - id_rsa.pub
+#        - authorized_keys
+#      become: yes
+#      become_user: "{{ admin_user }}"
+#    
+#    - name: Ensure correct permissions on the ssh keys
+#      file: path=/home/{{ admin_user }}/.ssh/{{ item }} mode=0600 owner={{ admin_user }} group={{ admin_user }}
+#      with_items:
+#        - id_rsa
+#        - id_rsa.pub
+#        - authorized_keys
+#      become: yes
+
+- name: Configure Data Science Libraries on the admin node
+  hosts: 127.0.0.1
+  connection: local
+  user: "{{ admin_user }}"
+  become: yes
+
+  roles:
+    - admin
+  
+  vars:
+    master: "local[*]"
+#    r_cran_mirror: http://cran.rstudio.com/
+    r_cran_mirror: https://cloud.r-project.org
+    r_packages_repos: "{{ r_cran_mirror }}"
+    r_repository:
+      - type: deb
+        url: "{{ r_cran_mirror }}/bin/linux/ubuntu {{ ansible_distribution_release }}/"

@@ -1,0 +1,38 @@
+# Initialization Template
+# Save as init.yml when completed
+# Total number of Virtual Machines to deploy (inluding the admin node)
+# e.g. Total: 9
+Total: 5
+
+# Master Username
+admin_user: "admin"
+
+# Master Password
+admin_pass: "ADMIN"
+
+# Haddop Verion
+#Hadoop_Version: "2.6.2"
+
+# Spark Version
+spark_version: "1.6.1"
+
+# Maven Version
+maven_version: "3.3.9"
+
+# Scala Version
+scala_version: "2.10.5"
+
+# TensorFlow Version
+tflow_version: "0.11.0"
+
+# DataStax Enterprise version
+dse_version: "5.0.1-1"
+
+# RStudio Server version
+rstudio_server: "1.0.136"
+
+# RStudio Shiny version
+shiny_version: "1.5.1.834"
+
+# Python Version
+python_version: 3.5

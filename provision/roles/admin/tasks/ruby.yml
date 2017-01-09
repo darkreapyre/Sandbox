@@ -1,0 +1,15 @@
+---
+- name: Install ruby 1.9.3
+  apt: pkg=ruby1.9.3 state=present
+
+- name: set global ruby version
+  alternatives: name=ruby path=/usr/bin/ruby1.9.1 link=/usr/bin/ruby
+
+- name: Install make
+  apt: pkg=make state=latest
+
+- name: Install latest available version of rake.
+  gem: name=rake state=latest user_install=no
+
+- name: Install latest available version of bundler.
+  gem: name=bundler state=latest user_install=no
