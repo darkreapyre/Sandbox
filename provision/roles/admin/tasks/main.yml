@@ -10,9 +10,11 @@
 - name: Copy "uber" jar to Apps directory
   copy: src=spark-cassandra-connector-uber.jar dest=/home/{{ admin_user }}/apps mode=0664 owner={{ admin_user }} group={{ admin_user }}
 
+# Uncomment if using a localvagrant vm as the admin node
 #- name: Download Spark 1.6.1 to Apps directory
 #  get_url: url=http://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ admin_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
 
+# Comment the following if using a local vagrant vm as the admin node and ensure to copy the Spark binary
 - name: Copy Spark 1.6.1 from local
   copy: src=spark-{{ spark_version }}-bin-hadoop2.6.tgz dest=/home/{{ admin_user }}/apps/spark-{{ spark_version }}-bin-hadoop2.6.tgz
 
