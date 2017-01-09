@@ -1,9 +1,23 @@
 ---
+- name: Install Python 3 pre-requisites
+  apt: name=python-software-properties state=present
+  become: yes
+
+- name: Add deadsnakes repo
+  apt_repository: repo="ppa:fkrull/deadsnakes"
+  become: yes
+
 - name: Updating apt repository
   apt: update_cache=yes
   become: yes
 
-- name: Install build dependecies for scipy
+- name: Install python 3
+  apt: name=python{{ python_version }}-dev state=present
+
+### You can use update-alternatives instead of fiddling with the symlinks yourself:
+###sudo update-alternatives --install /usr/bin/python3 python3.5 /usr/bin/python3.5 0
+
+- name: Install build dependecies for scipy on Python 2 # and hopefully 3
   apt: pkg=python-scipy state=build-dep
   become: yes
 
@@ -11,10 +25,14 @@
   apt: pkg={{ item }} state=present
   with_items:
     - python-pip
+    - python3-pip
+### install pip from https://pip.pypa.io/en/stable/installing/
+### wget https://bootstrap.pypa.io/get-pip.py
+### sudo python3 get-pip.py
     - python-scipy
   become: yes
 
-- name: Install common Python libraries
+- name: Install common Python 2 libraries
   pip: name={{ item }} state=present
   with_items:
     - scikit-learn
@@ -23,6 +41,19 @@
     - keras
   become: yes
 
-- name: Install TensorFlow for Python 2.7
+### Confirm the pip-3.5 executable
+- name: Install common Python 3 libraries
+  pip: name={{ item }} executable=pip3 state=present
+  with_items:
+    - scikit-learn
+    - Theano
+    - spark-sklearn
+    - keras
+  become: yes
+
+- name: Install TensorFlow for Python 2
   pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
   become: yes
+
+- name: Install TensoFlow for Python 3.5
+  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp35-cp35m-linux_x86_64.whl executable=pip-3.5 state=present
