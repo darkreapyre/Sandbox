@@ -98,6 +98,7 @@
   
   vars:
     master: "local[*]"
+    python_version: "3.5"
 #    r_cran_mirror: http://cran.rstudio.com/
     r_cran_mirror: https://cloud.r-project.org
     r_packages_repos: "{{ r_cran_mirror }}"
