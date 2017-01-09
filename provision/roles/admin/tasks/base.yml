@@ -23,6 +23,6 @@
     - keras
   become: yes
 
-- name: Install TensorFlow
+- name: Install TensorFlow for Python 2.7
   pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
   become: yes
