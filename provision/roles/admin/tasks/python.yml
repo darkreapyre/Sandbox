@@ -1,6 +1,6 @@
 ---
 - name: Install Python 3 pre-requisites
-  apt: name = python-software-properties state=present
+  apt: name=python-software-properties state=present
 
 - name: Add tmux Repository
   apt_repository: repo='ppa:pi-rho/dev'

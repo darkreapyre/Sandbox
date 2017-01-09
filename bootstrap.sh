@@ -23,11 +23,15 @@ sudo apt-get -y install ansible
 #sudo easy_install pip
 
 # Ensure permission issues with nested Vagrant
-cp -R /vagrant/provision /home/vagrant/
-echo "Bootstrap Complete"
+# Uncomment if using a vagrant vm as the admin node
+#cp -R /vagrant/provision /home/vagrant/
+#echo "Bootstrap Complete"
 
 # Provision
 echo "Deploy Data Science admin node"
-cd /home/vagrant/provision
+# Uncomment if using a vagrant vm as the admin node
+#cd /home/vagrant/provision
+# Cmment the following if using a vagrant vm as the admin node
+cd provision
 ansible-playbook local.yml --extra-vars "@init.yml"
 #vagrant up --no-parallel
