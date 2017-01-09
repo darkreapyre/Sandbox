@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-HOME=/vagrant
+# Uncomment if using a localvagrant vm as the admin node
+#HOME=/vagrant
 
 echo "Bootstrapping Admin Node"
 sudo apt-get -y update
@@ -13,7 +14,7 @@ echo "Installing Vagrant"
 wget https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
 sudo dpkg -i vagrant_1.8.7_x86_64.deb
 #vagrant plugin install vagrant-address
-vagrant plugin install vagrant-aws
+sudo vagrant plugin install vagrant-aws
 
 # Install Ansible
 echo "Installing Ansible"
@@ -23,15 +24,15 @@ sudo apt-get -y install ansible
 #sudo easy_install pip
 
 # Ensure permission issues with nested Vagrant
-# Uncomment if using a vagrant vm as the admin node
+# Uncomment if using a localvagrant vm as the admin node
 #cp -R /vagrant/provision /home/vagrant/
 #echo "Bootstrap Complete"
 
 # Provision
 echo "Deploy Data Science admin node"
-# Uncomment if using a vagrant vm as the admin node
+# Uncomment if using a localvagrant vm as the admin node
 #cd /home/vagrant/provision
-# Cmment the following if using a vagrant vm as the admin node
+# Comment the following if using a local vagrant vm as the admin node
 cd provision
 ansible-playbook local.yml --extra-vars "@init.yml"
 #vagrant up --no-parallel
