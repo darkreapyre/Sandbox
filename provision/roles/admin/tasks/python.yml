@@ -1,9 +1,18 @@
 ---
+- name: Install Python 3 pre-requisites
+  apt: name = python-software-properties state=present
+
 - name: Add tmux Repository
   apt_repository: repo='ppa:pi-rho/dev'
 
+- name: Add deadsnakes repo
+  apt_repository: repo="ppa:fkrull/deadsnakes"
+
 - name: Update Host
   apt: update_cache=yes
+
+- name: Install python 3
+  apt: name=python{{ python_version }}-dev state=present
 
 - name: Install build dependecies for matplotlib
   apt: pkg=python-matplotlib state=build-dep
@@ -14,7 +23,7 @@
     - build-essential
     - python-dev
     - python3-pip
-    - python3-dev
+#    - python3-dev
     - libzmq3
     - libzmq3-dev
     - g++
@@ -51,3 +60,4 @@
     - PILLOW
     - boto3 #<-- For AWS provisioning
 
+#TODO: Install the same libraries as above for Python 3

@@ -33,3 +33,6 @@ rstudio_server: "1.0.136"
 
 # RStudio Shiny version
 shiny_version: "1.5.1.834"
+
+# Python Version
+python_version: 3.5
