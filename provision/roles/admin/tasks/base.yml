@@ -43,7 +43,7 @@
 
 ### Confirm the pip-3.5 executable
 #- name: Install common Python 3 libraries
-#  pip: name={{ item }} executable=pip3 state=present
+#  pip: name={{ item }} executable=pip3.5 state=present
 #  with_items:
 #    - scikit-learn #<-- ISSUES
 #    - Theano
