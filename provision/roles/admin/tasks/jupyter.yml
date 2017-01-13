@@ -6,8 +6,8 @@
     owner: "{{ admin_user }}"
     group: "{{ admin_user }}"
 
-- name: Install Jupyter for Python3
-  pip: name=jupyter executable=pip3
+#- name: Install Jupyter for Python3 #<-- Issues until pip3.5 working
+#  pip: name=jupyter executable=pip3
 
 - name: Install Jupyter for Python2
   pip: name=jupyter
@@ -37,9 +37,9 @@
   shell: "pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
   become: yes
 
-- name: Install Jupyter nbextensions for Python 3
-  shell: "pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
-  become: yes
+#- name: Install Jupyter nbextensions for Python 3 #<-- Issues until pip3.5 working
+#  shell: "pip3 install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master"
+#  become: yes
 
 - name: Enable nbextensions
   shell: "jupyter contrib nbextension install --user"
