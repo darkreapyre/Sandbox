@@ -5,7 +5,7 @@ HOME=/vagrant
 echo "Bootstrapping Admin Node"
 sudo apt-get -y update
 sudo apt-get -y upgrade
-sudo apt-get -y install git curl zip unzip wget acl software-properties-common
+sudo apt-get -y install git curl zip unzip wget acl software-properties-common build-essential
 
 # Install Vagrant
 echo "Installing Vagrant"
