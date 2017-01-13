@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#sudo mkdir /vagrant
+#HOME=/vagrant
+
 echo "Bootstrapping Admin Node"
 sudo apt-get -y update
 sudo apt-get -y upgrade
