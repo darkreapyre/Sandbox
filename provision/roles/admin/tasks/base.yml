@@ -25,7 +25,7 @@
   apt: pkg={{ item }} state=present
   with_items:
     - python-pip
-    - python3-pip
+#    - python3-pip
 ### install pip from https://pip.pypa.io/en/stable/installing/
 ### wget https://bootstrap.pypa.io/get-pip.py
 ### sudo python3 get-pip.py
@@ -42,19 +42,19 @@
   become: yes
 
 ### Confirm the pip-3.5 executable
-- name: Install common Python 3 libraries
-  pip: name={{ item }} executable=pip3 state=present
-  with_items:
-    - scikit-learn #<-- ISSUES
-    - Theano
-    - spark-sklearn
-    - keras
-  become: yes
+#- name: Install common Python 3 libraries
+#  pip: name={{ item }} executable=pip3 state=present
+#  with_items:
+#    - scikit-learn #<-- ISSUES
+#    - Theano
+#    - spark-sklearn
+#    - keras
+#  become: yes
 
 - name: Install TensorFlow for Python 2
   pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp27-none-linux_x86_64.whl state=present
   become: yes
 
-- name: Install TensoFlow for Python 3.5 #<--ISSUES
-  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp35-cp35m-linux_x86_64.whl executable=pip-3.5 state=present
-  become: yes
+#- name: Install TensoFlow for Python 3.5 #<--ISSUES
+#  pip: name=https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-{{ tflow_version }}-cp35-cp35m-linux_x86_64.whl executable=pip-3.5 state=present
+#  become: yes
