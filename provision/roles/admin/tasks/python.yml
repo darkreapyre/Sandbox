@@ -51,7 +51,7 @@
     - PILLOW
     - boto3 #<-- For AWS provisioning
 
-- name: Install additional Python 3 libraries
-  pip: name={{ item }} executable=pip3 state=present
-  with_items:
-    - pdfkit #<-- For jupyter hide_code
+#- name: Install additional Python 3 libraries
+#  pip: name={{ item }} executable=pip3 state=present
+#  with_items:
+#    - pdfkit #<-- For jupyter hide_code
