@@ -6,7 +6,7 @@
 echo "Bootstrapping Admin Node"
 sudo apt-get -y update
 sudo apt-get -y upgrade
-sudo apt-get -y install git curl zip unzip wget acl software-properties-common
+sudo apt-get -y install git curl zip unzip wget acl software-properties-common build-essential
 
 # Install Vagrant
 echo "Installing Vagrant"
@@ -14,7 +14,10 @@ echo "Installing Vagrant"
 wget https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
 sudo dpkg -i vagrant_1.8.7_x86_64.deb
 #vagrant plugin install vagrant-address
-sudo vagrant plugin install vagrant-aws
+
+# Test this fix to resolve errors with the plugin installtion
+#sudo /opt/vagrant/embedded/bin/gem install ffi
+sudo vagrant plugin install vagrant-aws #<-- Issues
 
 # Install Ansible
 echo "Installing Ansible"
