@@ -24,3 +24,4 @@ dependencies:
         - git+https://github.com/fchollet/keras.git
         - spark-sklearn
         - awscli
+        - sparkmagic
