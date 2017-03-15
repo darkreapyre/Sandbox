@@ -23,3 +23,4 @@ dependencies:
         - tensorflow==0.12.1
         - git+https://github.com/fchollet/keras.git
         - spark-sklearn
+        - awscli
