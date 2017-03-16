@@ -7,12 +7,15 @@ error_msg ()
   echo 1>&2 "Error: $1"
 }
 
-# check for master node
+# Check for master node
 IS_MASTER=false
 if grep isMaster /mnt/var/lib/info/instance.json | grep true;
 then
   IS_MASTER=true
 fi
+
+# Set GPU/CPU for later development --> cpu for now
+CPU_GPU="cpu"
 
 sudo bash -c 'echo "fs.file-max = 25129162" >> /etc/sysctl.conf'
 sudo sysctl -p /etc/sysctl.conf
@@ -27,7 +30,7 @@ sudo yum install -y gcc-c++ patch zlib zlib-devel
 sudo  yum install -y libyaml-devel libffi-devel openssl-devel make
 sudo yum install -y bzip2 autoconf automake libtool bison iconv-devel sqlite-devel
 
-# move /usr/lib to /mnt/usr-moved/lib to avoid running out of space on /
+# Move /usr/lib to /mnt/usr-moved/lib to avoid running out of space on /
 if [ ! -d /mnt/usr-moved ]; then
   sudo mkdir /mnt/usr-moved
   sudo mv /usr/local /mnt/usr-moved/
@@ -38,7 +41,7 @@ fi
 
 # Install Python Libs
 sudo python -m pip install --upgrade pip
-TF_BINARY_URL="https://storage.googleapis.com/tensorflow/linux/$CPU_GPU/tensorflow-0.12.1-cp27-none-linux_x86_64.whl"
+TF_BINARY_URL="https://storage.googleapis.com/tensorflow/linux/$CPU_GPU/tensorflow-0.12.0-cp27-none-linux_x86_64.whl"
 sudo python -m pip install -U matplotlib seaborn cython networkx findspark
 sudo python -m pip install -U mrjob pyhive sasl thrift thrift-sasl snakebite
 sudo python -m pip install -U scikit-learn pandas numpy numexpr statsmodels scipy
