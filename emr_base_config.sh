@@ -20,6 +20,13 @@ sudo bash -c 'echo "* soft    nofile          1048576" >> /etc/security/limits.c
 sudo bash -c 'echo "* hard    nofile          1048576" >> /etc/security/limits.conf'
 sudo bash -c 'echo "session    required   pam_limits.so" >> /etc/pam.d/su'
 
+# Install Packages
+sudo yum install -y xorg-x11-xauth.x86_64 xorg-x11-server-utils.x86_64 xterm libXt libX11-devel libXt-devel libcurl-devel git graphviz cyrus-sasl cyrus-sasl-devel readline readline-devel
+sudo yum install --enablerepo=epel -y nodejs npm zeromq3 zeromq3-devel
+sudo yum install -y gcc-c++ patch zlib zlib-devel
+sudo  yum install -y libyaml-devel libffi-devel openssl-devel make
+sudo yum install -y bzip2 autoconf automake libtool bison iconv-devel sqlite-devel
+
 # move /usr/lib to /mnt/usr-moved/lib to avoid running out of space on /
 if [ ! -d /mnt/usr-moved ]; then
   sudo mkdir /mnt/usr-moved
@@ -30,6 +37,7 @@ if [ ! -d /mnt/usr-moved ]; then
 fi
 
 # Install Python Libs
+sudo python -m pip install --upgrade pip
 TF_BINARY_URL="https://storage.googleapis.com/tensorflow/linux/$CPU_GPU/tensorflow-0.12.1-cp27-none-linux_x86_64.whl"
 sudo python -m pip install -U matplotlib seaborn cython networkx findspark
 sudo python -m pip install -U mrjob pyhive sasl thrift thrift-sasl snakebite
