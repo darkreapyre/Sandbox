@@ -8,11 +8,11 @@ error_msg ()
 }
 
 # Check for master node
-IS_MASTER=false
-if grep isMaster /mnt/var/lib/info/instance.json | grep true;
-then
-  IS_MASTER=true
-fi
+#IS_MASTER=false
+#if grep isMaster /mnt/var/lib/info/instance.json | grep true;
+#then
+#  IS_MASTER=true
+#fi
 
 # Set GPU/CPU for later development --> cpu for now
 CPU_GPU="cpu"
@@ -50,18 +50,18 @@ sudo python -m pip install -U keras
 sudo python -m pip install -U $TF_BINARY_URL
 sudo python -m pip install -U spark-sklearn ggplot nilearn
 
-if [ "$IS_MASTER" = true ]; then
-  cd /home/hadoop/
-  aws s3 cp s3://chkrd/artifacts/livy-server-0.3.0.zip .
-  unzip livy-server-0.3.0.zip
-  rm livy-server-0.3.0.zip
-  cd livy-server-0.3.0
+#if [ "$IS_MASTER" = true ]; then
+#  cd /home/hadoop/
+#  aws s3 cp s3://chkrd/artifacts/livy-server-0.3.0.zip .
+#  unzip livy-server-0.3.0.zip
+#  rm livy-server-0.3.0.zip
+#  cd livy-server-0.3.0
 #  aws s3 cp s3://chkrd/artifacts/livy-env.sh conf/livy-env.sh
 #  aws s3 cp s3://chkrd/artifacts/livy-env.sh /home/hadoop/livy-server-0.3.0/conf/
 #  aws s3 cp s3://chkrd/artifacts/livy.conf conf/livy.conf
 #  aws s3 cp s3://chkrd/artifacts/livy.conf /home/hadoop/livy-server-0.3.3/conf/
-  mkdir logs
+#  mkdir logs
 #  ./bin/livy-server
-fi
+#fi
 
 echo "EMR Bootstrap action finished"
