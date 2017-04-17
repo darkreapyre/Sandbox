@@ -95,7 +95,7 @@ The output from the above command will be the output the newly created instance 
 >**Note:** *ami-XXXXXXXX* and *sg-XXXXXXXX* should be replaced with the output from **Step 6** and **Step 4** respectively.
 
 ### Step 8: Allocate an Elastic IP Address for EC2-VPC
-Since the `t2.micro` instance type requires a VPC and considering that the `admin` node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
+Since the `t2.micro` instance type requires a VPC and considering that the `launcher` node must have a decimated IP address that persists across reboots, an Elastic IP must be allocated using the following command line:
 ```
 > aws ec2 allocate-address --domain vpc
 ```
@@ -115,7 +115,7 @@ To associate the Elastic IP to the running `launcher` node instance, execute the
 ### Step 10: Assign a name to the `launcher` node
 Assign the `launcher` node it's name by aexecuting the following command:
 ```
-> aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=edge" 
+> aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=launcher" 
 ```
 
 >**Note:** *i-XXXXXXXX* should be replaced with the EC2 Instance ID created in __Step 7__.
@@ -162,7 +162,7 @@ $ scp -i devenv-key.pem devenv-key.pem ec2-user@<XXX.XXX.XXX.XXX>:/tmp
 $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 
 # Download the Architecture and Deployment code
-$ git clone https://github.com/darkreapyre/Sandbox.git
+$ git clone -b AWS https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
 $ mv /tmp/devenv-key.pem .
 ```
