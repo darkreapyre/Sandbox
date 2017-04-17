@@ -2,7 +2,7 @@
 This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing an AWS newbie to various architectuer deployment methodologies. The architecture of choice is an Internet of Things (IoT) pipeline that can be implemented using four differnt options:
 #### Traditional - Phase 1
 This phase will involve initially porting the legacy Data Science [“Sandbox”](https://github.com/darkreapyre/Sandbox) onto AWS.
-#### Microservices - Phase 2
+#### Containers - Phase 2
 This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to microservice containers.
 #### Mesosphere
 This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
@@ -37,9 +37,10 @@ To start, the following components must be configured or installed:
 	- **WorkSpaces**
 	- **S3**
 
-# Configure the AWS CLI and launch the `edge` EC2 instance
-After configureing and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `edge` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A: Considerations for Securing the Environment][].
+# Configure the AWS CLI and start the `launcher` EC2 instance
+After configuring and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `launcher` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A: Considerations for Securing the Environment][].
 
+## Using the AWS CLI (Manual Setup)
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
 - **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the `admin` instance.
@@ -52,7 +53,7 @@ From the Windows command prompt, type `aws configure`. The CLI will prompt for t
 ### Step 2: Create a Security Group for the EC2 Instance
 The next step is to configure the pre-requisites for launching an EC2 instance in order for it to be accessible. From the command prompt execute:
 ```
-> aws ec2 create-security-group --group-name devenv-sg --description "Security Group for DSIoT Architecture"
+> aws ec2 create-security-group --group-name devenv-sg --description "Security Group for Sandbox Architecture"
 ```
 >**Note:** The output from the above command will be the randomly generated security group ID. Make sure to take note of the ID for future steps.
 
@@ -76,20 +77,20 @@ Even though the security group allows a SSH connection from any network, a priva
 > aws ec2 create-key-pair --key-name devenv-key --query "KeyMaterial" --output text > devenv-key.pem
 ```
 
-### Step 6: Find the Amazon Image ID (AMI) for the `admin` node
-For the `edge` node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
+### Step 6: Find the Amazon Image ID (AMI) for the `launcher` node
+For the `launcher` node configuration  a `t2.micro` instance will be used. To find the latest AMI for the `t2.micro`, run the following command:
 ```
 > aws ec2 describe-images --owners amazon --filters "Name=root-device-type, Values=ebs" "Name=architecture, Values=x86_64" "Name=virtualization-type, Values=hvm" "Name=description, Values='*Amazon*Linux*'" "Name=name, Values='*amzn-ami-hvm-2016.09.1*gp2'" --query "Images[*].{ID:ImageId}"
 ```
 The above command will filter all Amazon owned AMI Instances for the *x86_64* architecture; *EBS-Backed*; was part of the  *2016.09.1* point release cycle; has *Amazon Linux* in the description and query to produce the resultant AMI ID. Take note of the latest AMI ID.
 
-### Step 7:  Launch the `admin` node instance
-Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the `admin` node EC2 Instance by executing the following:
+### Step 7:  Start the `launcher` node instance
+Using both the AMI ID noted above and the Security Group ID from **Step 2**, create the `launcher` node EC2 Instance by executing the following:
 
 ```
 > aws ec2 run-instances --image-id ami-XXXXXXXXX --security-group-ids sg-XXXXXXXX --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
 ```
-The output from the above command will be the output the newly created instance ID of the `admin` node. Make sure to take note of it for future usage.
+The output from the above command will be the output the newly created instance ID of the `launcher` node. Make sure to take note of it for future usage.
 
 >**Note:** *ami-XXXXXXXX* and *sg-XXXXXXXX* should be replaced with the output from **Step 6** and **Step 4** respectively.
 
@@ -103,24 +104,24 @@ The output from the above command will be the `PublicIp` assigned to the *devenv
 > aws ec2 describe-addresses --filters "Name=domain,Values=vpc"
 ```
 
-### Step 9: Associating the Elastic IP with the `admin` node
-To associate the Elastic IP to the running `edge` node instance, execute the following:
+### Step 9: Associating the Elastic IP with the `launcher` node
+To associate the Elastic IP to the running `launcher` node instance, execute the following:
 ```
 > aws ec2 associate-address --instance-id i-XXXXXXXX --allocation-id eipalloc-XXXXXXXX
 ```
 
 >**Note:** *i-XXXXXXXX* and *eipalloc-XXXXXXXX* should be replaced with the output from **Step 7** and the output from the `describe-addresses` command in **Step 8**.
 
-### Step 10: Assign a name to the `admin` node
-Assign the `edge` node it's name by aexecuting the following command:
+### Step 10: Assign a name to the `launcher` node
+Assign the `launcher` node it's name by aexecuting the following command:
 ```
 > aws ec2 create-tags --resources i-XXXXXXXX --tags "Key=Name,Value=edge" 
 ```
 
 >**Note:** *i-XXXXXXXX* should be replaced with the EC2 Instance ID created in __Step 7__.
 
-### Step 11: Connecting to the `edge` node
-Now that the `edge` node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
+### Step 11: Connecting to the `launcher` node
+Now that the `launcher` node has been created, it up and running and has a public IP allocated to it, the next step is to connect via SSH. For the sake of this step, the *ssh* client that comes with the [Git BASH](https://git-scm.com/) client. To do this, execute the following:
 - Open the *Git BASH* application.
 - Navigate to the location of the `devenv-key.pem` file and execute the following:
 ```
@@ -135,7 +136,7 @@ To shut down the `edge` node from the AWS CLI, run the following:
 > aws ec2 stop-instances --instance-ids i-XXXXXXXX
 ```
 
-To start the `edge` node from the AWS CLI, run the following:
+To start the `launcher` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 start-instances --instance-ids i-XXXXXXXX
@@ -148,7 +149,7 @@ To check if the instance is actually *stopped* before executing any of the abopv
 ```
 
 ### Step 12: Preparing for Provisionning
-After connecting to the `edge` node, chnage to the current working directory for the `ec2-user` and set up the [Sanbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
+After connecting to the `launcher` node, chnage to the current working directory for the `ec2-user` and set up the [Sandbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
 
 ```
 # Change to working directory of the .pem file
@@ -165,7 +166,13 @@ $ git clone https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox
 $ mv /tmp/devenv-key.pem .
 ```
-Now that the `edge` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
+Now that the `klauncher` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
+
+## Using the AWS CLI (CloudFormation)
+
+## Using Vagrant (VirtualBox)
+
+## Using Vagrant (EC2)
 
 ---
 # Traditional Iaas Architecture
@@ -179,13 +186,13 @@ export AWS_SECRET=########
 >**Note:** Replace `#######` with the *AWS Access key ID* and *Secret access key* respctivley.
 
 ---
-# Containerized GPU Architecture
+# GPU Container Architecture
 
 ---
 # Mesosphere DC/OS Architecture
 
 ---
-# NoOps Architecture
+# Serverless BaaS Architecture
 
 ---
 
