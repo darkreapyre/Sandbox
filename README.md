@@ -1,18 +1,20 @@
 # Overview
-This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing a new Technical Account Manager (TAM) to AWS for his/her development plan. The architecture of choice is an Internet of Things (IoT) pipeline that can be implemented using four differnt options:
-#### Traditional
+This document outlines the steps/procedures taken to design, implement and manage a development AWS environment/architecture for the purposes of introducing an AWS newbie to various architectuer deployment methodologies. The architecture of choice is an Internet of Things (IoT) pipeline that can be implemented using four differnt options:
+#### Traditional - Phase 1
 This phase will involve initially porting the legacy Data Science [“Sandbox”](https://github.com/darkreapyre/Sandbox) onto AWS.
-#### Containerized
-This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to Docker containers.
+#### Microservices - Phase 2
+This phase involves taking said architecture and porting it from an infrastructure-based (IaaS) cloud to microservice containers.
 #### Mesosphere
 This phase implements the __Phase 2__ environment on top of Mesosphere DC/OS.
-#### NoOps
+#### Serverless
 This phase will involve leveraging the various comparable AWS platforms to fully incorporate the solution into AWS by leveraging the various service offerings.
+
 These phases will be implemented by leveraging a number of Infrastructure as Code (IaC) tools in order to simulate any potential customer implementation scenarios:
 
-1. [Vagrant](https://www.vagrantup.com)/[Ansible](https://www.ansible.com)
-2. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
-3. [TerraForm](https://www.terraform.io)
+1. [Vagrant](https://www.vagrantup.com)
+2. [Ansible](https://www.ansible.com)
+3. [AWS CloudFormation](https://aws.amazon.com/cloudformation/)
+4. [TerraForm](https://www.terraform.io)
 
 Additionally, the objective of this implementation is to leverage the Command-line (CLI) tools, scripts and an AWS WorKSpaces in order to provide an advanced user experience over and above using the AWS Console.
 
