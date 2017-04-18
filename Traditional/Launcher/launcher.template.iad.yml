@@ -158,4 +158,4 @@ Resources:
       GroupId: !Ref sgdevenvsg
       IpProtocol: '-1'
       CidrIp: 0.0.0.0/0
-Description: CloudFormation Template for the the "launcher" instance
+Description: Default launcher node CloudFormation template for the Sandbox Architecture
