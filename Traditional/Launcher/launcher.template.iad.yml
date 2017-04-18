@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  vpcf98a429f:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 172.31.0.0/16
+      InstanceTenancy: default
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+  subnet06750e4f:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.0.0/20
+      AvailabilityZone: us-east-1b
+      VpcId: !Ref vpcf98a429f
+  subnet6d961e40:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.48.0/20
+      AvailabilityZone: us-east-1a
+      VpcId: !Ref vpcf98a429f
+  subnetfb0babc7:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.32.0/20
+      AvailabilityZone: us-east-1e
+      VpcId: !Ref vpcf98a429f
+  subnete4c04dbf:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.16.0/20
+      AvailabilityZone: us-east-1c
+      VpcId: !Ref vpcf98a429f
+  subnet58abc43d:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 172.31.64.0/20
+      AvailabilityZone: us-east-1d
+      VpcId: !Ref vpcf98a429f
+  igw4fe27528:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties: {}
+  doptebf6378c:
+    Type: 'AWS::EC2::DHCPOptions'
+    Properties:
+      DomainName: ec2.internal
+      DomainNameServers:
+        - AmazonProvidedDNS
+  acl8a8114ec:
+    Type: 'AWS::EC2::NetworkAcl'
+    Properties:
+      VpcId: !Ref vpcf98a429f
+  rtbd9a09abf:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref vpcf98a429f
+  instancei0093de1f08e392062:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      DisableApiTermination: 'false'
+      InstanceInitiatedShutdownBehavior: stop
+      ImageId: ami-22ce4934
+      InstanceType: t2.micro
+      KeyName: devenv-iad
+      Monitoring: 'false'
+      Tags:
+        - Key: Name
+          Value: launcher
+      NetworkInterfaces:
+        - DeleteOnTermination: 'true'
+          DeviceIndex: 0
+          SubnetId: !Ref subnet58abc43d
+          PrivateIpAddresses:
+            - PrivateIpAddress: 172.31.68.205
+              Primary: 'true'
+          GroupSet:
+            - !Ref sgdevenvsg
+  sgdevenvsg:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for Development and Testing
+      VpcId: !Ref vpcf98a429f
+  acl1:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Egress: 'true'
+      Protocol: '-1'
+      RuleAction: allow
+      RuleNumber: '100'
+      NetworkAclId: !Ref acl8a8114ec
+  acl2:
+    Type: 'AWS::EC2::NetworkAclEntry'
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Protocol: '-1'
+      RuleAction: allow
+      RuleNumber: '100'
+      NetworkAclId: !Ref acl8a8114ec
+  subnetacl1:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref acl8a8114ec
+      SubnetId: !Ref subnetfb0babc7
+  subnetacl2:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref acl8a8114ec
+      SubnetId: !Ref subnet06750e4f
+  subnetacl3:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref acl8a8114ec
+      SubnetId: !Ref subnet58abc43d
+  subnetacl4:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref acl8a8114ec
+      SubnetId: !Ref subnet6d961e40
+  subnetacl5:
+    Type: 'AWS::EC2::SubnetNetworkAclAssociation'
+    Properties:
+      NetworkAclId: !Ref acl8a8114ec
+      SubnetId: !Ref subnete4c04dbf
+  gw1:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref vpcf98a429f
+      InternetGatewayId: !Ref igw4fe27528
+  route1:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId: !Ref rtbd9a09abf
+      GatewayId: !Ref igw4fe27528
+    DependsOn: gw1
+  dchpassoc1:
+    Type: 'AWS::EC2::VPCDHCPOptionsAssociation'
+    Properties:
+      VpcId: !Ref vpcf98a429f
+      DhcpOptionsId: !Ref doptebf6378c
+  assoc1:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      AllocationId: 34.199.250.157
+      InstanceId: !Ref instancei0093de1f08e392062
+  ingress1:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref sgdevenvsg
+      IpProtocol: tcp
+      FromPort: '22'
+      ToPort: '22'
+      CidrIp: 0.0.0.0/0
+  egress1:
+    Type: 'AWS::EC2::SecurityGroupEgress'
+    Properties:
+      GroupId: !Ref sgdevenvsg
+      IpProtocol: '-1'
+      CidrIp: 0.0.0.0/0
+Description: CloudFormation Template for the the "launcher" instance
