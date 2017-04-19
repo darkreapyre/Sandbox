@@ -37,6 +37,7 @@ Resources:
             #!/bin/bash
             sudo -u ec2-user bash << "EOF"
             cd ~
+            sudo yum-config-manager --enable epel
             sudo yum -y git install kernel-devel kernel-headers dkms ansible
             sudo yum -y groupinstall "Development Tools"
             sudo yum -y update

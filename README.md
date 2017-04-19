@@ -164,6 +164,7 @@ $ scp -i devenv-key.pem devenv-key.pem ec2-user@<XXX.XXX.XXX.XXX>:/tmp
 $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 
 # Download the Architecture and Deployment code
+$ sudo yum-config-manager --enable epel
 $ sudo yum -y git install kernel-devel kernel-headers dkms ansible
 $ sudo yum -y groupinstall "Development Tools"
 $ sudo yum -y update
@@ -186,6 +187,8 @@ Now that the `launcher` node is ready, it can be leveraged to deploy any of the 
 ### Step 2: Select the CloudFormation Template
 
 ![Select Template](img/select_template.png)
+![Specify Details](img/specify_details.png)
+
 
 ---
 # Traditional IaaS Architecture
