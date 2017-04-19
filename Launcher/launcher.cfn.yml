@@ -38,11 +38,12 @@ Resources:
             sudo -u ec2-user bash << "EOF"
             cd ~
             sudo yum-config-manager --enable epel
-            sudo yum -y git install kernel-devel kernel-headers dkms ansible
+            sudo yum -y git install kernel-devel kernel-headers dkms
             sudo yum -y groupinstall "Development Tools"
             sudo yum -y update
             git clone -b AWS https://github.com/darkreapyre/Sandbox.git
             chmod +x /home/ec2-user/Sandbox/Launcher/launch.sh # <-- TBC
+            sudo yum -y install ansible
             EOF
 
   devenvsg:
