@@ -178,6 +178,13 @@ Now that the `launcher` node is ready, it can be leveraged to deploy any of the 
 
 ## Using the CloudFormation Console
 
+### Step 1: Launch the Stack
+
+
+### Step 2: Select the CloudFormation Template
+
+![Select Template](img/select_template.png)
+
 ---
 # Traditional IaaS Architecture
 
