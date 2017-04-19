@@ -132,7 +132,7 @@ $ ssh -i devenv-key.pem ec2-user@XXX.XXX.XXX.XXX
 
 >**Note:** *XXX.XXX.XXX.XXX* should be replaced with the `PublicIp` noted in **Step 8**. Additionally, for information on how to use *PuTTY* instead of *Git BASH* can new found [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html).
 
-To shut down the `edge` node from the AWS CLI, run the following:
+To shut down the `launcher` node from the AWS CLI, run the following:
 
 ```
 > aws ec2 stop-instances --instance-ids i-XXXXXXXX
@@ -164,6 +164,8 @@ $ scp -i devenv-key.pem devenv-key.pem ec2-user@<XXX.XXX.XXX.XXX>:/tmp
 $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 
 # Download the Architecture and Deployment code
+$ sudo yum -y update
+$ sudo yum -y install git
 $ git clone -b AWS https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox/Launcher
 $ mv /tmp/devenv-key.pem .
@@ -174,8 +176,10 @@ Now that the `launcher` node is ready, it can be leveraged to deploy any of the 
 
 ## Using the AWS CLI (CloudFormation)
 
+## Using the CloudFormation Console
+
 ---
-# Traditional Iaas Architecture
+# Traditional IaaS Architecture
 
 Before initializing the environment, make sure to run the following:
 
