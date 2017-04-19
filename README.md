@@ -38,7 +38,7 @@ To start, the following components must be configured or installed:
 	- **S3**
 
 # Configure the AWS CLI and start the `launcher` EC2 instance
-After configuring and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `launcher` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture, in essence the __Ansible Controler__ node. After the environment is created, this node is terminated. 
+After configuring and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `launcher` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture, in essence the __Ansible Control__ machine. After the environment is created, this node is terminated. 
 
 > __Note:__ It is possible not not terminate this node and leverage it at a later stage as a VPN edge point into the infrastructure or as an ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. However the *Well Architected* solution includes a dedicated __Bastion__ host for this specific purpose.
 
