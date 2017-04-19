@@ -164,12 +164,14 @@ $ scp -i devenv-key.pem devenv-key.pem ec2-user@<XXX.XXX.XXX.XXX>:/tmp
 $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 
 # Download the Architecture and Deployment code
+$ sudo yum -y git install kernel-devel kernel-headers dkms ansible
+$ sudo yum -y groupinstall "Development Tools"
 $ sudo yum -y update
-$ sudo yum -y install git
 $ git clone -b AWS https://github.com/darkreapyre/Sandbox.git
 $ cd Sandbox/Launcher
 $ mv /tmp/devenv-key.pem .
-$ ./launch.sh
+#$ ./launch.sh
+
 ```
 
 Now that the `launcher` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.

@@ -35,12 +35,13 @@ Resources:
         Fn::Base64:
           Fn::Sub: |
             #!/bin/bash
-            sudo yum -y update
-            sudo yum -y install git
             sudo -u ec2-user bash << "EOF"
             cd ~
+            sudo yum -y git install kernel-devel kernel-headers dkms ansible
+            sudo yum -y groupinstall "Development Tools"
+            sudo yum -y update
             git clone -b AWS https://github.com/darkreapyre/Sandbox.git
-            #chmod +x /home/ec2-user/Sandbox/Launcher/launch.sh # <-- TBC
+            chmod +x /home/ec2-user/Sandbox/Launcher/launch.sh # <-- TBC
             EOF
 
   launcherSecurityGroup:
