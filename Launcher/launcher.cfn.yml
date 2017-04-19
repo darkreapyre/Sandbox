@@ -26,7 +26,7 @@ Resources:
       KeyName: !Ref KeyName
       ImageId: !FindInMap [AMIMap, !Ref "AWS::Region", AMI]
       SecurityGroupIds:
-        - Ref: devenv-sg
+        - Ref: devenvsg
       Tags:
         - Key: Name
           Value: launcher
@@ -44,7 +44,7 @@ Resources:
             chmod +x /home/ec2-user/Sandbox/Launcher/launch.sh # <-- TBC
             EOF
 
-  devenv-sg:
+  devenvsg:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Default ssh Access
@@ -53,3 +53,6 @@ Resources:
           FromPort: '22'
           IpProtocol: tcp
           ToPort: '22'
+      Tags:
+        - Key: Name
+          Value: devenv-sg
