@@ -10,48 +10,48 @@ Resources:
       Tags:
         - Key: Name
           Value: Default
-  subnet77a80e3e:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: 172.31.32.0/20
-      AvailabilityZone: us-west-2a
-      VpcId: !Ref vpc051c6862
-  subnet39a22e5e:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: 172.31.16.0/20
-      AvailabilityZone: us-west-2b
-      VpcId: !Ref vpc051c6862
-  subnetdba7a083:
-    Type: 'AWS::EC2::Subnet'
-    Properties:
-      CidrBlock: 172.31.0.0/20
-      AvailabilityZone: us-west-2c
-      VpcId: !Ref vpc051c6862
-  igw18f6c47c:
-    Type: 'AWS::EC2::InternetGateway'
-    Properties: {}
-  dopt49520a2d:
-    Type: 'AWS::EC2::DHCPOptions'
-    Properties:
-      DomainName: us-west-2.compute.internal
-      DomainNameServers:
-        - AmazonProvidedDNS
-  aclbec0e1d9:
-    Type: 'AWS::EC2::NetworkAcl'
-    Properties:
-      VpcId: !Ref vpc051c6862
-  rtb26b7a041:
-    Type: 'AWS::EC2::RouteTable'
-    Properties:
-      VpcId: !Ref vpc051c6862
-  eip3420914575:
-    Type: 'AWS::EC2::EIP'
-    DependsOn:
-      - gw1
-    Properties:
-      Domain: vpc
-  instancei001faf4d784693e0d:
+#  subnet77a80e3e:
+#    Type: 'AWS::EC2::Subnet'
+#    Properties:
+#      CidrBlock: 172.31.32.0/20
+#      AvailabilityZone: us-west-2a
+#      VpcId: !Ref vpc051c6862
+#  subnet39a22e5e:
+#    Type: 'AWS::EC2::Subnet'
+#    Properties:
+#      CidrBlock: 172.31.16.0/20
+#      AvailabilityZone: us-west-2b
+#      VpcId: !Ref vpc051c6862
+#  subnetdba7a083:
+#    Type: 'AWS::EC2::Subnet'
+#    Properties:
+#      CidrBlock: 172.31.0.0/20
+#      AvailabilityZone: us-west-2c
+#      VpcId: !Ref vpc051c6862
+#  igw18f6c47c:
+#    Type: 'AWS::EC2::InternetGateway'
+#    Properties: {}
+#  dopt49520a2d:
+#    Type: 'AWS::EC2::DHCPOptions'
+#    Properties:
+#      DomainName: us-west-2.compute.internal
+#      DomainNameServers:
+#        - AmazonProvidedDNS
+#  aclbec0e1d9:
+#    Type: 'AWS::EC2::NetworkAcl'
+#    Properties:
+#      VpcId: !Ref vpc051c6862
+#  rtb26b7a041:
+#    Type: 'AWS::EC2::RouteTable'
+#    Properties:
+#      VpcId: !Ref vpc051c6862
+#  eip3420914575:
+#    Type: 'AWS::EC2::EIP'
+#    DependsOn:
+#      - gw1
+#    Properties:
+#      Domain: vpc
+  LauncherHost:
     Type: 'AWS::EC2::Instance'
     Properties:
       DisableApiTermination: 'false'
@@ -72,7 +72,7 @@ Resources:
               Primary: 'true'
           GroupSet:
             - !Ref sgdevenvsg
-  sgdevenvsg:
+  DefaultSG:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Security Group for Sandbox Architecture

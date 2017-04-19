@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Ansible Control Host for Infrastructure Deployment
+
+Parameters:    
+  KeyName:
+    Default: KeyPair
+    Description: Name of an existing EC2 KeyPair to enable access to the instance
+    Type: "AWS::EC2::KeyPair::KeyName"
+
+Mappings:
+  AMIMap:  # Amazon Linux AMI
+    us-east-1:
+      AMI: ami-c481fad3
+    us-west-1:
+      AMI: ami-de347abe
+    us-west-2:
+      AMI: ami-b04e92d0
+
+#Outputs: # <-- TBD
+
+Resources:
+  launcherInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.medium
+      KeyName: !Ref KeyName
+      ImageId: !FindInMap [AMIMap, !Ref "AWS::Region", AMI]
+      SecurityGroupIds:
+        - Ref: launcherSecurityGroup
+      Tags:
+        - Key: Name
+          Value: launcher
+      InstanceInitiatedShutdownBehavior: terminate
+      UserData:
+        Fn::Base64:
+          Fn::Sub: |
+            #!/bin/bash
+            sudo -u ec2-user bash << "EOF"
+            cd ~
+            git clone -b AWS https://github.com/darkreapyre/Sandbox.git
+            #chmod +x /home/ec2-user/Sandbox/Launcher/launch.sh # <-- TBC
+            EOF
+
+  launcherSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Default ssh Access
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: '22'
+          IpProtocol: tcp
+          ToPort: '22'

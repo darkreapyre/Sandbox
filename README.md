@@ -38,14 +38,16 @@ To start, the following components must be configured or installed:
 	- **S3**
 
 # Configure the AWS CLI and start the `launcher` EC2 instance
-After configuring and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `launcher` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture and can at a later stage be used as the VPN edge point into a VPC, a ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. For more information on securing and providing access into the architecture, see [Appendix A: Considerations for Securing the Environment][].
+After configuring and downloading the above pre-requisites, the following procedures will walk through setting up the basic EC2 instance, the `launcher` node. This instance is essentially a jump start into the AWS cloud. It is the instance that will allow for initial deployment of the architecture, in essence the __Ansible Controler__ node. After the environment is created, this node is terminated. 
+
+> __Note:__ It is possible not not terminate this node and leverage it at a later stage as a VPN edge point into the infrastructure or as an ssh bastion/jump host allowing for "local" code to be pushed to the cloud or simply just a "backdoor" into the environment. However the *Well Architected* solution includes a dedicated __Bastion__ host for this specific purpose.
 
 ## Using the AWS CLI (Manual Setup)
 ### Step 1: Configure the AWS CLI
 From the Windows command prompt, type `aws configure`. The CLI will prompt for the following:
-- **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the `admin` instance.
-- **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the `admin` instance.
-- **Default region name:** This is the AWS region where the `edge` instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
+- **AWS Access Key ID:** The Access Key ID for the AWS account that is being used to configure the `launcher` instance.
+- **AWS Secret Access Key:** The Secret Access Key for the AWS account being used to configure the `launcher` instance.
+- **Default region name:** This is the AWS region where the `launcher` instance will be configured. This can be any region, but it is recommended to choose the region closest to you.
 - **Default output format:** This is the format of the results from running a CLI command. It can be formatted as `json`, `text` or `table`. It is recommended that for **Step 1**, to have the output formatted as `text` to better familiarize oneself with using the CLI.
 
 >**Note:** To configure multiple profiles, named profiles can be configured with the `--profile <profile name>` option. Additionally, to change any of the above options, simply run `aws configure` again.
@@ -151,39 +153,43 @@ To check if the instance is actually *stopped* before executing any of the abopv
 ### Step 12: Preparing for Provisionning
 After connecting to the `launcher` node, chnage to the current working directory for the `ec2-user` and set up the [Sandbox](https://git.com/darkreapyre/Sandbox.git) repository by running the following:
 
-```
+```sh
 # Change to working directory of the .pem file
 $ cd <location of devenv-key.pem>
 
 # Copy the .pem file to the `admin` node
 $ scp -i devenv-key.pem devenv-key.pem ec2-user@<XXX.XXX.XXX.XXX>:/tmp
 
-# ssh to the `admin` node
+# ssh to the `launcher` node
 $ ssh -i devenv-key.pem ex2-user@<XXX.XXX.XXX.XXX>
 
 # Download the Architecture and Deployment code
 $ git clone -b AWS https://github.com/darkreapyre/Sandbox.git
-$ cd Sandbox
+$ cd Sandbox/Launcher
 $ mv /tmp/devenv-key.pem .
+$ ./launch.sh
 ```
-Now that the `klauncher` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
+
+Now that the `launcher` node is ready, it can be leveraged to deploy any of the above mentioned architectures using a number of the deplyment options. The next sections will describe each of the possible architectures to choose as well as how to leverage the different deployment tools within each architecture.
 
 ## Using the AWS CLI (CloudFormation)
-
-## Using Vagrant (VirtualBox)
-
-## Using Vagrant (EC2)
 
 ---
 # Traditional Iaas Architecture
 
 Before initializing the environment, make sure to run the following:
-```
+
+```sh
 export AWS_KEY=########
 export AWS_SECRET=########
 ```
 
 >**Note:** Replace `#######` with the *AWS Access key ID* and *Secret access key* respctivley.
+
+
+For more information on securing and providing access into the architecture, see [Appendix A: Considerations for Securing the Environment][].
+
+
 
 ---
 # GPU Container Architecture
