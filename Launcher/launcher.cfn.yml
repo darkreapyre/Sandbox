@@ -35,6 +35,8 @@ Resources:
         Fn::Base64:
           Fn::Sub: |
             #!/bin/bash
+            sudo yum -y update
+            sudo yum -y install git
             sudo -u ec2-user bash << "EOF"
             cd ~
             git clone -b AWS https://github.com/darkreapyre/Sandbox.git
